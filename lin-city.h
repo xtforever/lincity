@@ -1174,7 +1174,7 @@ extern void check_endian (void);
 extern void eswap32 (int *);
 extern void eswap16 (unsigned short *);
 extern void malloc_failure (void);
-
+extern void HandleError (char *, int);
 /*
   fileutil
   ********
