@@ -99,7 +99,7 @@ char LIBDIR[_MAX_PATH];
 char LIBDIR[256];
 #endif
 
-char *lc_save_dir;
+
 char save_names[10][42];
 
 /* ---------------------------------------------------------------------- *
