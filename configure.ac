@@ -32,9 +32,9 @@ dnl to be expanded?
 dnl FC_EXPAND_DIR(DEFAULT_LIBDIR,"${datadir}/lincity")
 dnl AC_DEFINE_UNQUOTED(DEFAULT_LIBDIR,"$DEFAULT_LIBDIR")
 dnl -------------------------------------------------------
-FC_EXPAND_DIR(DEFAULT_LIBDIR,[${datadir}/lincity])
-AC_DEFINE_UNQUOTED(DEFAULT_LIBDIR,"$DEFAULT_LIBDIR")
-
+dnl FC_EXPAND_DIR(DEFAULT_LIBDIR,[${datadir}/lincity])
+dnl AC_DEFINE_UNQUOTED(DEFAULT_LIBDIR,"$DEFAULT_LIBDIR")
+AC_DEFINE_UNQUOTED(DEFAULT_LIBDIR,"/usr/share/lincity")
 AM_BINRELOC
 
 dnl -------------------------------------------------------
