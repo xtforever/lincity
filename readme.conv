@@ -1,0 +1,117 @@
+# https://www.racetrackdriving.com/howto/convert-sourceforge-cvs-to-git/
+Convert cvs to git
+
+There is a handy git cvsimport command that is part of git when cvs integration is enabled. You can run it as follows:
+
+git cvsimport -v -a -k -d `pwd`/cvs -C PROJECT PROJECT
+
+Option breakdown:
+
+    -v: verbose
+    -a: import all commits (by default commits in the last 10 minutes are not imported)
+    -k: do not expand keywords (e.g. $Id$)
+    -d CVSROOT: where the cvs repository is
+    -C TARGET: where to create the git repository
+
+The final PROJECT argument is the name of the cvs module to import, which is usually the SourceForge project's name.
+
+After it finishes you will have a PROJECT subdirectory in the current directory which will be a git repository with full history.
+
+You should now create an author mapping. While it is not required for conversion, it is an important step to do for public projects. See the author mapping section below.
+Clean up
+
+The conversion converts cvs branches and tags.
+
+For whatever reason there were some useless branches and tags created in the conversions I have done:
+
+    vendor branch and start tag at the very beginning of the history, and
+    origin branch which was the same as master.
+
+I like using gitk for looking at the entire history to quickly locate junk that should not exist. Don't blindly nuke branches and tags - make sure they have no useful commits first.
+
+In my case, I would run:
+
+git branch -D vendor origin
+git tag -d start
+
+Push
+
+You probably want to have the git repository stored somewhere other than your local machine, like github or maybe your own git host. The important part here is to push all branches and all tags. Branches and tags cannot be pushed together for whatever reason, thus assuming your remote is named UPSTREAM you would run:
+
+git push UPSTREAM --all
+git push UPSTREAM --tags
+
+For simple imports, you are done! Read on for advanced imports.
+Merges
+
+CVS repositories I converted so far did not have any merges. git cvsimport has a -m option that might be handy if your CVS history has merges. Use gitk to find out if your CVS history has merges.
+More cvsimport options
+
+Read git help cvsimport to find out what other options you can give to git cvsimport.
+Author mapping
+
+If you are performing a conversion on a public project, that is, not something that is internal to your company, you should take the time to convert the authors from cvs to git format. Here is how to do this in a straightforward but a semi-manual way.
+
+First, perform the conversion without author mapping, like has been described above.
+
+Second, get a list of sourceforge usernames in your history:
+
+cd PROJECT
+git shortlog |egrep ^\\w
+
+This produces something like this:
+
+esr (13):
+kjetilja (846):
+mfx (349):
+zanee (9):
+
+Assuming all usernames contain a single word, you can get started on an authors mapping file thusly:
+
+git shortlog |egrep ^\\w |awk '{print $1, "=", $1, "<"$1"@users.sourceforge.net>"}'
+
+This should render something similar to this:
+
+esr = esr <esr@users.sourceforge.net>
+kjetilja = kjetilja <kjetilja@users.sourceforge.net>
+mfx = mfx <mfx@users.sourceforge.net>
+zanee = zanee <zanee@users.sourceforge.net>
+
+If that looks good, redirect the output to the first version of the authors file:
+
+git shortlog |egrep ^\\w |awk '{print $1, "=", $1, "<"$1"@users.sourceforge.net>"}' >../authors.txt
+
+.. is there to put the authors file outside of the repository, which you are going to blow away.
+
+If the list is small, you can simply go to http://sourceforge.net/users/USER for each of the usernames in the list and copy and paste the user's full name, if any, to your authors mapping file.
+
+If the list is large, the following code can rapidly get you the user names right now. You'll have to tweak it if sourceforge changes its markup.
+
+sfuserinfo() {
+  curl -s "http://sourceforge.net/users/$1" | \
+  grep -o '<title>SourceForge.net: .* - User Profile</title>' | \
+  sed -Ee 's,<title>SourceForge.net: (.*) - User Profile</title>,\1,'
+}
+
+for u in `cat ../authors.txt |awk -F '=' '{print $1}'`; do
+  n=`sfuserinfo $u`
+  echo "$u = $n <$u@users.sourceforge.net>"
+done >../authors1.txt
+
+Check authors1.txt for sanity, then move it over authors.txt:
+
+mv ../authors1.txt ../authors.txt
+
+If you want to go the extra mile, find the users on github and use their preferred email address instead of the sourceforge email addresses.
+
+When finished, rerun the conversion:
+
+cd ..
+rm -r PROJECT
+git cvsimport -v -a -k -d `pwd`/cvs -C PROJECT -A authors.txt PROJECT
+
+Footnotes
+
+I don't understand why some people convert from cvs to svn and then to git. Subversion has its own peculiarities that git then has to deal with (like requiring commits for branches and tags). If you want to convert from cvs to git, don't use pointless intermediaries.
+
+Some people neglect to push the tags (CVS tags and git tags). They probably never use gitk or a similar tool to look at their history.

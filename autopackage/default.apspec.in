@@ -1,0 +1,66 @@
+[Meta]
+RootName: @lincity.sourceforge.net/lincity:$SOFTWAREVERSION
+DisplayName: Lincity Simulation Game
+DisplayName[es]: Lincity, Juego de simulación
+ShortName: lincity
+Maintainer: Lincity Developers
+Packager: Taj Morton <taj@wildgardenseed.com>
+Summary: Build & maintain a city/country
+Summary[es]: Construya y mantenga una ciudad o un país
+SoftwareVersion: @VERSION@
+URL: http://lincity.sourceforge.net	
+PackageVersion: 1
+License: GNU General Public License, Version 2 
+AutopackageTarget: 1.0
+
+[Description]
+Lincity is a city simulation game. You are required to build and maintain
+a city. You must feed, house, provide jobs and goods for your residents.
+You can build a sustainable economy with the help of renewable energy and
+recycling, or you can go for broke and build rockets to escape from a 
+pollution ridden and resource starved planet, it's up to you.
+
+[Description:es]
+Usted debe construir y mantener una ciudad. Debe proporcionar comida, hogar,
+trabajo y mercancías a sus residentes. Puede construir una economía
+sustentable con la ayuda de las energías renovables y el reciclaje, o puede
+gastarlo todo y construir cohetes para escapar de un planeta lleno de polución
+y vacío de recursos, es su decisión. Debido a los recursos finitos disponibles
+en cualquier parte, este no es un juego que pueda dejar por largos períodos de
+tiempo. Este juego es parecido al juego comercial de simulación, que lleva un
+nombre simil.
+
+[BuildPrepare]
+export APBUILD_DISABLE_BOGUS_DETECTOR=1
+prepareBuild --enable-binreloc
+mkdir -p $build_root/share/doc/$SHORTNAME-$SOFTWAREVERSION
+mkdir -p $build_root/share/icons
+cp ABOUT-NLS Acknowledgements CHANGES COPYRIGHT COPYING README \
+README.profiling TODO $build_root/share/doc/$SHORTNAME-$SOFTWAREVERSION
+cp lincity.png lincity.desktop $build_root/share/icons
+
+[BuildUnprepare]
+unprepareBuild
+
+[Imports]
+echo '*' | import
+
+[Prepare]
+require @libpng.org/libpng 3
+require @xfree86.org/xlib 6
+require @zlib.org/zlib 1
+
+[Install]
+installExe bin/*
+
+installMan 6 man/man6/*
+outputStatus "$intl_INSTALLING_DATA"
+copyFiles share/lincity share/locale "$PREFIX/share"
+
+copyFiles share/doc "$PREFIX/share"
+
+installIcon share/icons/lincity.png
+installDesktop "Games" share/icons/lincity.desktop
+
+[Uninstall]
+uninstallFromLog
