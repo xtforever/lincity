@@ -95,18 +95,13 @@ EXTRA_PROGRAMS = xlincity$(EXEEXT) lincity$(EXEEXT) xpicedit$(EXEEXT) \
 	picedit$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/codeset.m4 \
-	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/glibc21.m4 \
-	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intdiv0.m4 \
-	$(top_srcdir)/m4/inttypes-pri.m4 $(top_srcdir)/m4/inttypes.m4 \
-	$(top_srcdir)/m4/inttypes_h.m4 $(top_srcdir)/m4/isc-posix.m4 \
-	$(top_srcdir)/m4/lcmessage.m4 $(top_srcdir)/m4/lib-ld.m4 \
-	$(top_srcdir)/m4/lib-link.m4 $(top_srcdir)/m4/lib-prefix.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/progtest.m4 \
-	$(top_srcdir)/m4/stdint_h.m4 $(top_srcdir)/m4/uintmax_t.m4 \
-	$(top_srcdir)/m4/ulonglong.m4 $(top_srcdir)/acinclude.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/gettext.m4 \
+	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/isc-posix.m4 \
+	$(top_srcdir)/m4/lib-ld.m4 $(top_srcdir)/m4/lib-link.m4 \
+	$(top_srcdir)/m4/lib-prefix.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -116,7 +111,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = intl/Makefile
+CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -275,9 +270,8 @@ CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/intl/Makefile.in ABOUT-NLS COPYING README TODO \
-	compile config.guess config.sub depcomp install-sh ltmain.sh \
-	missing mkinstalldirs
+	ABOUT-NLS COPYING README TODO compile config.guess config.sub \
+	depcomp install-sh ltmain.sh missing mkinstalldirs
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -321,7 +315,6 @@ am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
-ALLOCA = @ALLOCA@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
@@ -331,15 +324,12 @@ AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 BINRELOC_CFLAGS = @BINRELOC_CFLAGS@
 BINRELOC_LIBS = @BINRELOC_LIBS@
-BUILD_INCLUDED_LIBINTL = @BUILD_INCLUDED_LIBINTL@
-CATOBJEXT = @CATOBJEXT@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
-DATADIRNAME = @DATADIRNAME@
 
 ### DEFS = @DEFS@ -DLIBDIR=\"${pkgdatadir}\"
 DEFS = @DEFS@ $(BINRELOC_CFLAGS) 
@@ -353,8 +343,6 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
-GENCAT = @GENCAT@
-GLIBC21 = @GLIBC21@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
 INSTALL = @INSTALL@
@@ -362,11 +350,7 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-INSTOBJEXT = @INSTOBJEXT@
-INTLBISON = @INTLBISON@
 INTLLIBS = @INTLLIBS@
-INTLOBJS = @INTLOBJS@
-INTL_LIBTOOL_SUFFIX_PREFIX = @INTL_LIBTOOL_SUFFIX_PREFIX@
 LCLIBS = @LCLIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
@@ -408,7 +392,6 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 XGETTEXT = @XGETTEXT@
@@ -473,7 +456,7 @@ with_gzip = @with_gzip@
 AUTOMAKE_OPTIONS = foreign
 X_DEFS = -DLC_X11=1 -Wall
 SVGA_DEFS = -DSVGALIB=1 
-SUBDIRS = m4 intl po modules
+SUBDIRS = m4 po modules
 noinst_HEADERS = \
 	cliglobs.h   \
 	common.h     confw32.h    \
@@ -599,8 +582,6 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
-intl/Makefile: $(top_builddir)/config.status $(top_srcdir)/intl/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
@@ -1309,7 +1290,6 @@ distcheck: dist
 	  && am__cwd=`pwd` \
 	  && $(am__cd) $(distdir)/_build/sub \
 	  && ../../configure \
-	    --with-included-gettext \
 	    $(AM_DISTCHECK_CONFIGURE_FLAGS) \
 	    $(DISTCHECK_CONFIGURE_FLAGS) \
 	    --srcdir=../.. --prefix="$$dc_install_base" \
