@@ -360,7 +360,13 @@ resize_geometry (int new_width, int new_height)
 
     /* Complete refresh of the screen required here */
 #if !defined (SVGALIB)
-    screen_full_refresh ();
+
+    /* Prevent refresh if no init done yet (happens if the WM
+     * disregards hints and resizes the splash screen).  */
+    if (monthgraph_nojobs)
+	  screen_full_refresh ();
+
+
 #endif
 }
 
@@ -381,8 +387,10 @@ resize_main_win (int new_width, int new_height)
     Rect* mw = &scr.main_win;
     mw->w = new_width - 640 + MAIN_WIN_W;
     mw->w = (mw->w/16)*16;
+     mw->w = mw->w > MAIN_WIN_MAX ? MAIN_WIN_MAX : mw->w;
     mw->h = new_height - 480 + MAIN_WIN_H;
     mw->h = (mw->h/16)*16;
+    mw->h = mw->h > MAIN_WIN_MAX ? MAIN_WIN_MAX : mw->h;
     adjust_main_origin (main_screen_originx, main_screen_originy,0);
 }
 
