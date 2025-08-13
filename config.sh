@@ -4,9 +4,9 @@
 ##   automake (GNU automake) 1.9.4
 ##   ltmain.sh (GNU libtool) 1.5.2
 
-aclocal-1.15 -I m4
+aclocal -I m4
 libtoolize --force
-automake-1.15 --add-missing
+automake --add-missing
 autoconf
 autoheader
 rm -f config.cache
@@ -15,9 +15,9 @@ rm -f config.cache
 exit
 
 ## This is how i did it in ver 1.12
-aclocal
-automake --add-missing --foreign Makefile
-autoconf
-autoheader
-rm -f config.cache
-./configure --prefix=$HOME/lincity
+#aclocal
+#automake --add-missing --foreign Makefile
+#autoconf
+#autoheader
+#rm -f config.cache
+#./configure --prefix=$HOME/lincity
