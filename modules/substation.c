@@ -92,6 +92,10 @@ mps_substation (int x, int y)
     format_power (s, sizeof(s), MP_INFO(x,y).int_5);    
     mps_store_title(i++,_("Local Demand"));
     mps_store_title(i++,s);
+
+     if (MP_INFO(x,y).int_6 == 0)
+			  return;
+    
     i++;
 
     mps_store_title(i++,_("Grid Status"));
