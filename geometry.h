@@ -139,6 +139,7 @@ void draw_bezel (Rect r, short width, int color);
 #define MAIN_WIN_X 56+8+1
 #define MAIN_WIN_Y 8
 #define MAIN_WIN_H 400
+#define MAIN_WIN_MAX ((WORLD_SIDE_LEN-2)*16)
 
 /* Speed buttons */
 #define SPEED_BUTTONS_X 0 + MENU_BUTTON_W
