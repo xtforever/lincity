@@ -198,7 +198,9 @@ max_int (int i1, int i2)
 {
   return i1 > i2 ? i1 : i2;
 }
-
+/*
+  FIXME: bad name
+ */
 void * 
 lcalloc (size_t size) 
 {
@@ -206,8 +208,31 @@ lcalloc (size_t size)
   tmp = malloc(size);
   if (tmp == NULL) {
     printf("couldn't malloc %d bytes!  Dying.\n",size);
-    exit(-1);
+    exit(1);
   }
   
   return tmp;
 }
+
+void *xmalloc (size_t size) 
+{
+  void * tmp;
+  tmp = malloc(size);
+  if (tmp == NULL) {
+    printf("couldn't malloc %d bytes!  Dying.\n",size);
+    exit(1);
+  }
+  return tmp;
+}
+
+void *xcalloc (size_t nmemb, size_t size) 
+{
+  void * tmp;
+  tmp = calloc(nmemb,size);
+  if (tmp == NULL) {
+    printf("couldn't calloc %d*%d bytes!  Dying.\n",nmemb,size);
+    exit(1);
+  }
+  return tmp;
+}
+
