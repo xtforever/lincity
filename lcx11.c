@@ -684,7 +684,10 @@ Fgl_putbox_low (Drawable dst, int x0, int y0, int x1, int y1,
     }
 
     if (dst == display.win) {
-	pixmap_putbox (src, 0, 0, bpl, x1, y1, w, h);
+	    /*
+	      src is copied to pixmap	
+	     */
+	    pixmap_putbox ((char *)src, 0, 0, bpl, x1, y1, w, h);
     }
 
     XPutImage (display.dpy, dst, display.pixcolour_gc[0], im, 0, 0,
