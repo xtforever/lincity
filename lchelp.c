@@ -615,7 +615,7 @@ void
 parse_tbuttonline (char *st)
 {
     char s[100], ss[120], s1[100];
-    int i, j, x, y;
+    int i, j, x, y,tmp;
     strcpy (s1, st);		/* hpux fix?  we can live with this. */
 
     sscanf (s1, "tbutton %d %d %s", &x, &y, s);
@@ -643,6 +643,7 @@ parse_tbuttonline (char *st)
     sprintf (ss, "text %d %d ", x + 2, y + 2);
     strcat (ss, st);
     parse_textline (ss);
-    sprintf (ss, "button %d %d %d %d %s", x, y, (strlen (st) * 8) + 4, 12, s);
+    tmp=(strlen (st) * 8) + 4;
+    sprintf (ss, "button %d %d %d %d %s", x, y, tmp, 12, s);
     parse_buttonline (ss);
 }
