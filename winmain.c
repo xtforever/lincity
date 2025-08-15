@@ -413,7 +413,7 @@ lc_create_window (void)
 				 (LPVOID) NULL		// no params to pass on
 				 );
     if (!display.hWnd) {
-	exit (-1);
+	exit (1);
     }
   
     // Display the window

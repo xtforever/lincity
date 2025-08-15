@@ -113,7 +113,7 @@ dialog_box(int arg_color, int argc, ...)
   /* Try the locks */
   if (db_up) {
       printf("Already have a dialog box on screen!\n");
-      exit(-1);  /* GCS: I guess this must be a critical bug. */
+      exit(1);  /* GCS: I guess this must be a critical bug. */
   } else {
       db_up = 1; /* XXX: Need to reconcile these - don't need both flags */
       db_flag = 1;
@@ -148,6 +148,9 @@ dialog_box(int arg_color, int argc, ...)
 	working_str = va_arg(ap, char *);
 	do {
 	    newline = (char *)strchr(working_str,'\n');
+/*
+  FIXME: use strndup()
+ */
 	    if (newline) {
 		int linelen = newline - working_str;
 		db_entry[dbn].text = (char *)lcalloc(1 + linelen);

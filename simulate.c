@@ -825,7 +825,7 @@ debug_mappoints (void)
     for (y = 0; y < WORLD_SIDE_LEN; y++) {
       if ((MP_TYPE(x,y) < 0) || (MP_TYPE(x,y) > 400)) {
 	printf ("Error in mappoint %d %d (%d)\n", x, y, MP_TYPE(x,y));
-	exit(-1);
+	exit(1);
       }
     }
   }

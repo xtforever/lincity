@@ -600,7 +600,7 @@ load_png_graphic (short type, short group, char* id,
 	    break;
 	} else {
 	    fprintf (stderr,"Error, wrong id string");
-	    exit(-1);
+	    exit(1);
 	}
     }
 
@@ -610,7 +610,7 @@ load_png_graphic (short type, short group, char* id,
 	main_types[type].graphic = grphc;
     } else {
 	fprintf (stderr,"Error, couldn't find id string");
-	exit(-1);
+	exit(1);
     }
     return 0;
 }
