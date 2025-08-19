@@ -1938,32 +1938,14 @@ do_monthgraph (int full_refresh)
 void
 initialize_monthgraph (void)
 {
-    int i;
 
-    monthgraph_size = scr.monthgraph.w;
-
-    monthgraph_pop = (int*) malloc (sizeof(int) * monthgraph_size);
-    if (monthgraph_pop == 0) {
-	malloc_failure ();
-    }
-    monthgraph_starve = (int*) malloc (sizeof(int) * monthgraph_size);
-    if (monthgraph_starve == 0) {
-	malloc_failure ();
-    }
-    monthgraph_nojobs = (int*) malloc (sizeof(int) * monthgraph_size);
-    if (monthgraph_nojobs == 0) {
-	malloc_failure ();
-    }
-    monthgraph_ppool = (int*) malloc (sizeof(int) * monthgraph_size);
-    if (monthgraph_ppool == 0) {
-	malloc_failure ();
-    }
-    for (i = 0; i < monthgraph_size; i++) {
-	monthgraph_pop[i] = 0;
-	monthgraph_starve[i] = 0;
-	monthgraph_nojobs[i] = 0;
-	monthgraph_ppool[i] = 0;
-    }
+	monthgraph_size = scr.monthgraph.w;
+/* xcalloc can not fail */
+    monthgraph_pop = (int*) xcalloc (sizeof(int) , monthgraph_size);
+    monthgraph_starve = (int*) xcalloc (sizeof(int) , monthgraph_size);
+    monthgraph_nojobs = (int*) xcalloc (sizeof(int) ,  monthgraph_size);
+    monthgraph_ppool = (int*) xcalloc (sizeof(int) , monthgraph_size);
+    
 }
 
 static void
@@ -2336,11 +2318,10 @@ display_info_message (int colour, char* ss, char* xs)
         Rect* b = &scr.status_message_1;
 	int num_char = b->w / 9 - 1;
 	char *sm1, *sm2;
-	if ((sm1 = (char *) malloc (num_char+1)) == 0)
-	    malloc_failure ();
-	if ((sm2 = (char *) malloc (num_char+1)) == 0)
-	    malloc_failure ();
 
+	sm1=xmalloc(num_char+1);
+	sm2=xmalloc(num_char+1);
+	
 	format_status_message (sm1,sm2,num_char,ss,xs);
 	status_message(sm1,sm2);
 	free (sm1);
