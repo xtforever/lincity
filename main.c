@@ -734,14 +734,11 @@ compile_results (void)
     FILE *outf;
     int group_count[NUM_OF_GROUPS];
 
-    if ((s = (char *) malloc (lc_save_dir_len + strlen (LC_SAVE_DIR)
-			      + strlen (RESULTS_FILENAME) + 64)) == 0)
-	malloc_failure ();
-
-    sprintf (s, "%s%c%s", lc_save_dir, PATH_SLASH, RESULTS_FILENAME);
+    asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, RESULTS_FILENAME);
 
     count_all_groups (group_count);
-    if ((outf = fopen (s, "w")) == 0)
+    outf = fopen (s, "w");
+    if ( outf  ==  NULL)
     {
 	printf (_("Unable to open %s\n"), RESULTS_FILENAME);
 	free (s);
@@ -825,24 +822,20 @@ print_results (void)
     char *s;
     if (compile_results () == 0)
 	return;
-    if ((s = (char *) malloc (lc_save_dir_len + strlen (LC_SAVE_DIR)
-			      + strlen (RESULTS_FILENAME) + 64)) == 0)
-	malloc_failure ();
+    asprintf(&s,"cat %s/%s",lc_save_dir,RESULTS_FILENAME);
 
-    strcpy (s, "cat ");
-    strcat (s, lc_save_dir);
-    strcat (s, "/");
-    strcat (s, RESULTS_FILENAME);
     printf ("\n");
     system (s);
     printf ("\n");
+    free(s);
 #endif
 }
 
 #if defined (commentout)
 void mail_results(void)
 {
-    char s[256];
+#if 0
+     char s[256];
     if (compile_results()==0)
 	return;
     strcpy(s,"mail -s 'LinCity results' lc-results@floot.demon.co.uk < ");
@@ -852,6 +845,7 @@ void mail_results(void)
     strcat(s,"/");
     strcat(s,RESULTS_FILENAME);
     system(s);
+#endif    
 }
 #endif
 
@@ -861,10 +855,8 @@ window_results (void)
     char *s;
     if (compile_results () == 0)
 	return;
-    if ((s = (char *) malloc (lc_save_dir_len + strlen (LC_SAVE_DIR)
-			      + strlen (RESULTS_FILENAME) + 64)) == 0)
-	malloc_failure ();
-    sprintf (s, "%s%c%s", lc_save_dir, PATH_SLASH, RESULTS_FILENAME);
+    asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, RESULTS_FILENAME);
     ok_dial_box (s, RESULTS, 0L);
+    free(s);
 }
 
