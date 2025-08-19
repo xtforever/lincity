@@ -972,10 +972,11 @@ choose_residence (void)
 {
     int cost;
     FILE* tempfile;
-    char* s = (char*) malloc (lc_save_dir_len + 9);
+    char* s;
 
-    sprintf (s, "%s%c%s", lc_save_dir, PATH_SLASH, "res.tmp");
-    if ((tempfile = fopen (s, "w")) == 0)
+    asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, "res.tmp");
+    tempfile = fopen (s, "w");
+    if ( tempfile == 0)
 	do_error ("Can't write res.tmp");
     free (s);
 
