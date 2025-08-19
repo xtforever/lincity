@@ -101,12 +101,11 @@ remove_scene (char *cname)
 {
     char *s;
     int l;
-    if ((l = strlen (cname)) < 2)	/* Thanks to Chris J. Kiick */
+    l = strlen (cname);
+    if (l < 2)	/* Thanks to Chris J. Kiick */
 	return;
 
-    if ((s = (char *) malloc (lc_save_dir_len + l + 16)) == 0)
-	malloc_failure ();
-    sprintf (s, "%s%c%s", lc_save_dir, PATH_SLASH, cname);
+    asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, cname);
     remove (s);
     free (s);
 }
@@ -313,19 +312,11 @@ save_city (char *cname)
 
     if ((l = strlen (cname)) < 2)
 	return;
-    if ((s = (char *) malloc (lc_save_dir_len + l + 16)) == 0)
-	malloc_failure ();
-    if ((s2 = (char *) malloc (lc_save_dir_len + l + 32)) == 0)
-	malloc_failure ();
-    if ((s3 = (char *) malloc ((lc_save_dir_len + l) * 2 + 32)) == 0)
-	malloc_failure ();
-    if ((s4 = (char *) malloc ((lc_save_dir_len + l) * 2 + 32)) == 0)
-	malloc_failure ();
 
-    sprintf (s, "%s%c%s", lc_save_dir, PATH_SLASH, cname);
-    sprintf (s2, "%s%c%s", lc_save_dir, PATH_SLASH, "tmp-save");
-    sprintf (s3, "gzip -f %s", s2);
-    sprintf (s4, "mv %s.gz %s", s2, s);
+    asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, cname);
+    asprintf (&s2, "%s%c%s", lc_save_dir, PATH_SLASH, "tmp-save");
+    asprintf (&s3, "gzip -f %s", s2);
+    asprintf (&s4, "mv %s.gz %s", s2, s);
 
 #if defined (WIN32)
     save_city_raw (s);
@@ -641,8 +632,8 @@ load_city (char *cname)
 void
 load_saved_city (char *s)
 {
-    char *cname = (char *) malloc (strlen (lc_save_dir) + strlen (s) + 2);
-    sprintf (cname, "%s%c%s", lc_save_dir, PATH_SLASH, s);
+    char *cname ;
+    asprintf (&cname, "%s%c%s", lc_save_dir, PATH_SLASH, s);
     load_city (cname);
     free (cname);
 }
@@ -694,9 +685,8 @@ verify_city (char *cname)
     if (strlen(cname) == 0) {
 	return 0;
     }
-    if ((s = (char *) malloc (lc_save_dir_len + strlen(cname) + 2)) == 0)
-	malloc_failure ();
-    sprintf (s, "%s%c%s", lc_save_dir, PATH_SLASH, cname);
+
+    asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, cname);
     if (!file_exists(s)) {
 	free (s);
 	return 0;
