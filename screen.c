@@ -2266,7 +2266,7 @@ ok_dial_box (char *fn, int good_bad, char *xs)
     } 
     stat(s,&statbuf);
 
-    ss = (char *)lcalloc(statbuf.st_size + 1);
+    ss = (char *)xmalloc(statbuf.st_size + 1);
     retval = fread(ss,sizeof(char),statbuf.st_size,inf);
     ss[statbuf.st_size] = '\0';
 

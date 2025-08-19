@@ -1331,7 +1331,7 @@ init_mouse_registry()
 Mouse_Handle *
 mouse_register(Rect * r, void (*function)(int, int, int)) 
 {
-    mhandle_current = (Mouse_Handle *)lcalloc(sizeof(Mouse_Handle));
+	mhandle_current = (Mouse_Handle *)xcalloc(1,sizeof(Mouse_Handle));
     mhandle_count++;
     if (mhandle_first == NULL) {
 	mhandle_current->next = NULL;
