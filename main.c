@@ -207,7 +207,10 @@ lincity_main (int argc, char *argv[])
       borderx, bordery
       pix_double
      */
+#ifdef LC_X11
+    /* FIXME: we need to check the other variables */
     parse_xargs (argc, argv, &geometry);
+#endif
     /* Initialize random number generator */
 #ifndef CS_PROFILE
 #ifdef SEED_RAND
