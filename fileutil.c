@@ -666,19 +666,25 @@ malloc_failure (void)
   exit (1);
 }
 
-char*
-load_graphic(char *s)
+char*load_graphic(char *s)
 {
     int x,l;
-    char ss[LC_PATH_MAX],*graphic;
-    FILE *inf;
-    strcpy(ss,graphic_path);
-    strcat(ss,s);
-    if ((inf=fopen(ss,"rb"))==NULL)
+    char *fullname;
+   char  *graphic;
+    FILE *inf;    
+    asprintf( &fullname,"%s/%s",graphic_path,s);
+    inf=fopen(fullname,"rb");
+    if ( !inf)
     {
-	strcat(ss," -- UNABLE TO LOAD");
-	do_error(ss);
+	    char *tmp;
+	    asprintf(&tmp,"UNABLE TO LOAD:%s",fullname);
+	// do_error will exit()
+	do_error(tmp);
     }
+    /*
+      FIXME: looks complicated
+      perhaps use stat and fread ?
+     */
     fseek(inf,0L,SEEK_END);
     l=ftell(inf);
     fseek(inf,0L,SEEK_SET);
@@ -695,8 +701,8 @@ load_lincityrc (void)
     FILE *fp;
     int arg;
     char buf[128];
-
-    if ((fp = fopen (lincityrc_file, "r")) == 0) {
+    fp = fopen (lincityrc_file, "r");
+    if ( !fp ) {
 	save_lincityrc();
 	return;
     }
@@ -754,8 +760,8 @@ void
 save_lincityrc (void)
 {
     FILE *fp;
-
-    if ((fp = fopen (lincityrc_file, "w")) == 0) {
+    fp = fopen (lincityrc_file, "w");
+    if ( !fp ) {
 	return;
     }
 
