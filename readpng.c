@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "png.h"
-#include "malloc.h"
+#include "lclib.h"
 #include "lin-city.h"
 #include "lctypes.h"
 #include "lintypes.h"
@@ -590,8 +590,7 @@ load_png_graphic (short type, short group, char* id,
 	    int nr,nc;
 	    char* p;
 	    nr = nc = main_groups[group].size;
-	    p = grphc = malloc(nr*16*nc*16);
-	    if (!grphc) malloc_failure();
+	    p = grphc = xcalloc(nr*16,nc*16);
 	    for (r=ri*16;r<(ri+nr)*16;r++) {
 		for (c=ci*16;c<(ci+nc)*16;c++) {
 		    *p++ = row_pointers[r][c];
