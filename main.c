@@ -183,7 +183,6 @@ lincity_main (int argc, char *argv[])
 #ifdef LC_X11
     borderx = 0;
     bordery = 0;
-    parse_xargs (argc, argv, &geometry);  /* GCS FIX: Why here? */
 #elif defined (WIN32)
     /* borderx & bordery are autocomputed in WinMain() */
 #endif
@@ -203,6 +202,12 @@ lincity_main (int argc, char *argv[])
     /* Load preferences */
     load_lincityrc ();
 
+    /*
+      may overwrite:
+      borderx, bordery
+      pix_double
+     */
+    parse_xargs (argc, argv, &geometry);
     /* Initialize random number generator */
 #ifndef CS_PROFILE
 #ifdef SEED_RAND
