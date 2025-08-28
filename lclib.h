@@ -23,6 +23,7 @@ int max_int (int i1, int i2);
 void * lcalloc (size_t size);
 void *xmalloc (size_t size);
 void *xcalloc (size_t nmemb, size_t size) ;
+char *xstrdup(const char *s);
 
 #endif
 

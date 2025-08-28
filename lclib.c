@@ -236,3 +236,14 @@ void *xcalloc (size_t nmemb, size_t size)
   return tmp;
 }
 
+void *xstrdup(const char *str)
+{
+	char *tmp;
+	tmp=strdup(str);
+	if (tmp == NULL) {
+		printf("couldn't strdup()  Dying.\n");
+		exit(1);
+	}
+	return tmp;
+}
+
