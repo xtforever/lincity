@@ -331,12 +331,12 @@ void
 Create_Window (char *geometry)
 {
     short q;
-    Visual *vid;
+    Visual *vid; //set but not used 
     XSetWindowAttributes xswa;
     XSizeHints sizehint;
     XWMHints wmhints;
     int depth;
-    unsigned char wname[256];	/* Window Name */
+//    unsigned char wname[256];	/* Window Name */
     unsigned long vmask = CWEventMask | CWBackPixel | CWBackingStore;
 
     depth = DefaultDepth (display.dpy, display.screen);
@@ -391,14 +391,18 @@ Create_Window (char *geometry)
 				     False);
 
     /* Title */
-    sprintf ((char *) wname,
+    {
+	    char *w;
+	    asprintf (&w,
 	     _("xlincity, Version %s, "
 	     "(Copyright) IJ Peters - copying policy GNU GPL"),
 	     VERSION);
-    XChangeProperty (display.dpy, display.win,
-		     XA_WM_NAME, XA_STRING, 8, PropModeReplace, wname,
-		     strlen ((char *) wname));
-
+	    XChangeProperty (display.dpy, display.win,
+			     XA_WM_NAME, XA_STRING, 8, PropModeReplace,
+			     (const  unsigned char *)w, strlen (w));
+	    free(w);
+    }
+    
     /* Window Manager Hints (This is supposed to make input work.) */
     wmhints.flags = InputHint;
     wmhints.input = True;
@@ -455,7 +459,7 @@ HandleError (char *description, int degree)
 
   if (degree == FATAL) {
       fprintf (stderr, _("Program aborting...\n"));
-      exit (-1);
+      exit (1);
     }
 }
 
