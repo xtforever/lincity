@@ -6,6 +6,7 @@
 #include "lcconfig.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "lclib.h"
 #include "lcstring.h"
 #include "ldsvgui.h"
 #include "lcintl.h"
@@ -461,9 +462,8 @@ draw_save_dir (int bg_colour)
     struct dirent *ep;
     DIR *dp;
 #endif
-    if ((s = (char *) malloc (lc_save_dir_len + strlen (LC_SAVE_DIR) + 64)) == 0)
-	malloc_failure ();
-    strcpy (s, lc_save_dir);
+
+    s=xstrdup(lc_save_dir);
     if (!directory_exists (s))
     {
 	printf (_("Couldn't find the save directory %s\n"), s);
