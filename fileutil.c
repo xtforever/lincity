@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h> /* XXX: GCS FIX: What does configure need to know? */
+#include "lclib.h"
 #include "lcintl.h"
 #include "lcstring.h"
 #include "ldsvgui.h"
@@ -162,18 +163,13 @@ _access (const char *path, int mode)
 int
 execute_command (char *cmd, char *p1, char *p2, char *p3)
 {
-  char *sys_cmd = (char *) malloc (strlen (cmd) + strlen (p1) + strlen (p2)
-				   + strlen (p3) + 4);
-  int ret_value;
-
-  if (sys_cmd == 0) {
-    malloc_failure ();
-  }
-  sprintf (sys_cmd, "%s %s %s %s", cmd, p1, p2, p3);
-  ret_value = system (sys_cmd);
+	char *sys_cmd;
+	int ret_value;
+	asprintf (&sys_cmd, "%s %s %s %s", cmd, p1, p2, p3);
+	ret_value = system (sys_cmd);
 /* fprintf(stderr, "system(%s)=%i\n", sys_cmd, ret_value); */
-  free (sys_cmd);
-  return ret_value;
+	free (sys_cmd);
+	return ret_value;
 }
 
 void
@@ -525,11 +521,13 @@ init_path_strings (void)
 #else
     homedir = getenv ("HOME");
 #endif
-
+/*
+  FIXME: let asprintf do its job
+ */
     /* Various dirs and files */
     lc_save_dir_len = strlen (homedir) + strlen (LC_SAVE_DIR) + 1;
-    if ((lc_save_dir = (char *) malloc (lc_save_dir_len + 1)) == 0)
-	malloc_failure ();
+    lc_save_dir = (char *) xmalloc (lc_save_dir_len + 1);
+
     sprintf (lc_save_dir, "%s%c%s", homedir, PATH_SLASH, LC_SAVE_DIR);
     sprintf (colour_pal_file, "%s%c%s", LIBDIR, PATH_SLASH, "colour.pal");
     sprintf (opening_path, "%s%c%s", LIBDIR, PATH_SLASH, "opening");
@@ -565,11 +563,7 @@ init_path_strings (void)
 #endif
 
     /* Temp file for results */
-    lc_temp_filename = (char *) malloc (lc_save_dir_len + 16);
-    if (lc_temp_filename == 0) {
-	malloc_failure ();
-    }
-    sprintf (lc_temp_filename, "%s%c%s", lc_save_dir, PATH_SLASH, "tmp-file");
+    asprintf (&lc_temp_filename, "%s%c%s", lc_save_dir, PATH_SLASH, "tmp-file");
 
     /* Path for localization */
 #if defined (ENABLE_NLS)
@@ -626,7 +620,10 @@ make_savedir (void)
     make_dir_ok_flag = 0;
 #endif
 }
-
+/*
+FIXME:
+commentout == no more use ?
+ */
 void
 check_savedir (void)
 {
@@ -645,8 +642,7 @@ check_savedir (void)
 	askdir_lines = l / 40 + ((l % 40) ? 1 : 0);
 	r = l / askdir_lines + ((l % askdir_lines) ? 1 : 0);
 	for (j = 0; j < askdir_lines; j++) {
-	    if ((askdir_path[j] = (char *) malloc (r + 1)) == 0)
-		malloc_failure ();
+		askdir_path[j] = (char *) xmalloc (r + 1);
 	    for (k = 0; k < r; k++, i++)
 		*(askdir_path[j] + k) = lc_save_dir[i];
 	    *(askdir_path[j] + k) = 0;
