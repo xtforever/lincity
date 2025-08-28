@@ -9,6 +9,7 @@
 #include "lcstring.h"
 #include <ctype.h>
 #include "common.h"
+#include "lclib.h"
 #include "lctypes.h"
 #include "fileutil.h"
 #include "lin-city.h"
@@ -299,38 +300,36 @@ draw_help_page (char *helppage)
     /* This buffer is just a copy of helppage.  Sometimes helppage is an 
        entry within help_button_s[], which gets overwritten when the page 
        is parsed. */
-    if ((helppage_short = (char*) malloc (strlen(helppage) + 1)) == 0) {
-	malloc_failure ();
-    }
-    strcpy (helppage_short, helppage);
 
+    helppage_short=xstrdup(helppage);
+    
     /* Right click on mini-screen */
     if (strncmp (helppage, "mini-screen.hlp", 15) == 0) {
 	draw_big_mini_screen ();
     } else if (strncmp (helppage, "mini-in-main.hlp", 17) == 0) {
 	/* do nothing */
     } else {
-	/* This buffer is for the full path of the help file.
-	   The file might be either in the help directory (most cases),
-	   or in the temp directory (dynamically created pages). */
-	if ((helppage_full = (char *) malloc (lc_save_dir_len 
-					      + strlen (help_path) 
-					      + strlen(helppage) + 2)) == 0) {
-	    malloc_failure ();
-	}
+	    /* This buffer is for the full path of the help file.
+	       The file might be either in the help directory (most cases),
+	       or in the temp directory (dynamically created pages). */
 
-	/* Open the file */
-	sprintf (helppage_full, "%s%s", help_path, helppage);
-	if ((inf = fopen (helppage_full, "r")) == 0) {
-	    sprintf (helppage_full, "%s%c%s", lc_save_dir, 
-		     PATH_SLASH, helppage);
-	    if ((inf = fopen (helppage_full, "r")) == 0) {
-		sprintf (helppage_full, "%s%s", help_path, HELPERRORPAGE);
-		if ((inf = fopen (helppage_full, "r")) == 0)
+	    /* Open the file */
+	    asprintf (&helppage_full, "%s%s", help_path, helppage);
+	    inf = fopen (helppage_full, "r");
+	    if ( !inf ) {
+		    free(helppage_full);
+		    asprintf (&helppage_full, "%s%c%s", lc_save_dir, PATH_SLASH, helppage);
+		    inf = fopen (helppage_full, "r");
+	    }
+	    if (!inf) {
+		    free(helppage_full);
+		    asprintf (&helppage_full, "%s%s", help_path, HELPERRORPAGE);
+		    inf = fopen (helppage_full, "r");
+	    }
+	    if (!inf) {
 		    do_error ("Help error");
 	    }
-	}
-
+    
 	/* Parse and render help file */
 	numof_help_buttons = 0;
 	Fgl_fillbox (mw->x, mw->y, mw->w, mw->h, HELPBACKGROUNDCOLOUR);
