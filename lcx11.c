@@ -312,7 +312,7 @@ parse_xargs (int argc, char **argv, char **geometry)
     {
 	printf (" Can't open the dispay!\n");
 	HandleError ("Cannot open display.\n", FATAL);
-	exit (-1);
+	exit (1);
     }
     /* Record the screen number and root window. */
     display.screen = DefaultScreen (display.dpy);
