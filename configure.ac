@@ -1,7 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
 dnl Initialization
-AC_INIT([Lincity],[1.13.3],[lincity-users@lists.sourceforge.net],[lincity])
+dnl  lincity-users@lists.sourceforge.net is closed
+AC_INIT([Lincity],[1.13.5],[root@localhost],[lincity])
 AC_CONFIG_SRCDIR([colour.pal])
 AC_AIX
 AM_INIT_AUTOMAKE
