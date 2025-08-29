@@ -14,7 +14,7 @@ HandleError (char *description, int degree)
   printf ("Error: %s\n", description);
   if (degree == FATAL)
     {
-      exit (-1);
+      exit (1);
     }
 }
 
