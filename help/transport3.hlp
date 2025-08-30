@@ -54,7 +54,7 @@ text 130 316 to either the mine nor the
 text 130 326 power station.
 
 tbutton 130 270 coalmine.hlp Coalmine
-tbutton 21 285 powercoal.hlp Coal PS
+tbutton 21 285 powerscoal.hlp Coal PS
 tbutton 25 310 market.hlp Market
 
 tbutton -1 350 transport4.hlp Next page - Crossing rivers
