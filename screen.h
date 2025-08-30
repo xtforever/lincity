@@ -59,6 +59,7 @@ void mini_aux_handler(int x, int y, int button);
 /* Message area */
 void display_info_message (int colour, char* ss, char* xs);
 void reset_status_message (void);
+void info_box(char *head, char *fmt, ...);
 
 #define CB_SPACE 20 // space between checkbuttons for market/port
 

@@ -4,6 +4,7 @@
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
 #include "lcconfig.h"
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -2191,6 +2192,25 @@ close_port_cb (void)
     cs_mouse_button = LC_MOUSE_LEFTBUTTON;
 }
 
+/*
+     make a info box with
+        head  and description
+    Intended for warnings etc 
+   Dynamic generation of messages in inform the user about
+  the problem
+
+ */
+void  info_box(char *head, char *fmt, ...)
+{
+	char *buf;
+	va_list ptr;
+	va_start(ptr,fmt);
+	vasprintf(&buf, fmt,ptr);
+	va_end(ptr);
+	display_info_message (red(10), head, buf);
+	free(buf);	
+}
+
 int
 yn_dial_box (char * s1, char * s2, char * s3, char *s4)
 {
@@ -2309,7 +2329,12 @@ format_status_message (char* sm1, char* sm2, int num_char, char* ss, char* xs)
     }
 }
 
-/* Call this routine instead of dialog_box() */
+/* Call this routine instead of dialog_box() 
+  generate a box where you can select ok only
+   colour: set color 
+   char *ss:  header
+    char *xs: Text message
+*/
 void
 display_info_message (int colour, char* ss, char* xs)
 {
