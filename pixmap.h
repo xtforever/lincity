@@ -9,7 +9,7 @@
 /* ---------------------------------------------------------------------- *
  * Public Global Variables
  * ---------------------------------------------------------------------- */
-extern char* pixmap;
+extern char* pixmap;                       //lxc11.c
 extern int pixmap_height;
 extern int pixmap_width;
 
