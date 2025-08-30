@@ -82,6 +82,10 @@ unconfine_pointer (void)
     display.pointer_confined = 0;
 }
 
+/*
+  FIXME: the code assumes that the tables have the same size
+ that is imported from a file ? serious ?
+ */
 void
 setcustompalette (void)
 {
@@ -89,9 +93,13 @@ setcustompalette (void)
   int n, r, g, b, i, flag[256];
   XColor pal[256];
   FILE *inf;
+  /*
+    FIXME: what is flag ?
+   */
   for (i = 0; i < 256; i++)
     flag[i] = 0;
-  if ((inf = fopen (colour_pal_file, "r")) == 0)
+  inf = fopen (colour_pal_file, "r");
+  if ( !inf)
     HandleError ("Can't find the colour pallet file", FATAL);
 
   while (feof (inf) == 0)
@@ -99,13 +107,18 @@ setcustompalette (void)
       fgets (s, 99, inf);
       if (sscanf (s, "%d %d %d %d", &n, &r, &g, &b) == 4)
 	{
-	  pal[n].red = r;
-	  pal[n].green = g;
-	  pal[n].blue = b;
-	  pal[n].flags = DoRed | DoGreen | DoBlue;
-	  pal[n].pixel = colour_table[n];	/* ??? */
+		if ( n < sizeof(pal)/sizeof(*pal) ) {
+			pal[n].red = r;
+			pal[n].green = g;
+			pal[n].blue = b;
+			pal[n].flags = DoRed | DoGreen | DoBlue;
+			/*
+			  FIXME: why ?
+			 */
+			pal[n].pixel = colour_table[n];	/* ??? */
 
-	  flag[n] = 1;
+			flag[n] = 1;
+		}
 	}
     }
   fclose (inf);
@@ -229,7 +242,8 @@ initfont ()
 {
   int i;
   FILE *finf;
-  if ((finf = fopen (fontfile, "r")) == 0)
+  finf = fopen (fontfile, "r");
+  if ( !fnf )
     HandleError ("Can't open the font file", FATAL);
   for (i = 0; i < 256 * 8; i++)
     myfont[i] = fgetc (finf);
@@ -666,7 +680,6 @@ Fgl_putbox_low (Drawable dst, int x0, int y0, int x1, int y1,
     /* XXX: assert is not the right way to check for errors - wck */
     assert (im != 0);
     im->data = (char *) xcalloc (im->bytes_per_line , pmult * h);
-    assert (im->data != 0);
 
     src += src_x + src_y * bpl;
 
