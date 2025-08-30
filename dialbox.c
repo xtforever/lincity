@@ -147,33 +147,32 @@ dialog_box(int arg_color, int argc, ...)
 	char * newline;
 	working_str = va_arg(ap, char *);
 	do {
-	    newline = (char *)strchr(working_str,'\n');
-/*
-  FIXME: use strndup()
- */
-	    if (newline) {
-		int linelen = newline - working_str;
-		db_entry[dbn].text = (char *)xmalloc(1 + linelen);
-		strncpy(db_entry[dbn].text,working_str,linelen);
-		db_entry[dbn].text[linelen] = '\0';
-		working_str = (newline + 1) != '\0' ? newline + 1 : NULL;
-	    } else {
-		db_entry[dbn].text = (char *)xmalloc(1 + strlen(working_str));
-		strncpy(db_entry[dbn].text,working_str,strlen(working_str));
-		db_entry[dbn].text[strlen(working_str)] = '\0';
-		working_str = NULL;
-	    }
+		newline = (char *)strchr(working_str,'\n');
 
-	    db_entry[dbn].type = 0;
-	    db_entry[dbn].retval = 0;
+		if (newline) {
+			int linelen = newline - working_str;
+			db_entry[dbn].text = strndup(working_str,linelen);
+			/* skip forward */
+			if ( * (newline+1) != 0 )
+				working_str = (newline + 1);
+			else
+				working_str=NULL;
+		} else {
+			int linelen=strlen(working_str);
+			db_entry[dbn].text = strndup(working_str,linelen);
+			working_str = NULL;
+		}
+	    
+		db_entry[dbn].type = 0;
+		db_entry[dbn].retval = 0;
 
-	    db_rect[dbn].w = (strlen(db_entry[dbn].text) * CHAR_WIDTH);
-	    db_rect[dbn].h = CHAR_HEIGHT;
-	    if (db_rect[dbn].w > db_longest_line) 
-		db_longest_line = db_rect[dbn].w;
+		db_rect[dbn].w = (strlen(db_entry[dbn].text) * CHAR_WIDTH);
+		db_rect[dbn].h = CHAR_HEIGHT;
+		if (db_rect[dbn].w > db_longest_line) 
+			db_longest_line = db_rect[dbn].w;
 
-	    ln++;
-	    dbn++;
+		ln++;
+		dbn++;
 	} while ((working_str != NULL) && (strlen(working_str) >= 1));
     } else { 
 	db_entry[dbn].text = va_arg(ap, char *);
