@@ -49,6 +49,6 @@ tbutton 180 310 market.hlp Market
 
 text 20 362 See also:
 tbutton 100 360 transport.hlp Transport
-tbutton 200 360 power.hlp Power
+tbutton 200 360 powerline.hlp Power
 tbutton 265 360 coal.hlp Coal
 tbutton 320 360 ore.hlp Ore
