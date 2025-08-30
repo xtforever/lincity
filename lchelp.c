@@ -61,6 +61,7 @@ do_help_mouse (int x, int y, int mbutton)
     refresh_main_screen ();
 }
 
+
 static void mini_help_page(char *helppage, char *helppage_short)
 {
 	char *helppage_full;
@@ -71,7 +72,7 @@ static void mini_help_page(char *helppage, char *helppage_short)
 
 	
 	   asprintf (&helppage_full, "%s%s", help_path, helppage);
-
+	   
 	   inf = fopen (helppage_full, "r");
 	    if ( !inf ) {
 		    free(helppage_full);
@@ -79,14 +80,11 @@ static void mini_help_page(char *helppage, char *helppage_short)
 		    inf = fopen (helppage_full, "r");
 	    }
 	    if (!inf) {
+		    info_box("Help error","can not open %.100s",helppage_full);
 		    free(helppage_full);
-		    asprintf (&helppage_full, "%s%s", help_path, HELPERRORPAGE);
-		    inf = fopen (helppage_full, "r");
+		    return ;
 	    }
-	    if (!inf) {
-		    do_error ("Help error");
-	    }
-    
+	   
 	/* Parse and render help file */
 	numof_help_buttons = 0;
 	Fgl_fillbox (mw->x, mw->y, mw->w, mw->h, HELPBACKGROUNDCOLOUR);
@@ -98,7 +96,6 @@ static void mini_help_page(char *helppage, char *helppage_short)
 	}
 	fclose (inf);
 	free (helppage_full);
-	helppage_full=NULL;
 
 	/* For ask-dir, we add path info */
       /*
@@ -120,13 +117,8 @@ static void mini_help_page(char *helppage, char *helppage_short)
 void
 draw_help_page (char *helppage)
 {
-  //    Rect* mw = &scr.main_win;
-//	char *helppage_full;
 	char *helppage_short;
 	int i;
-    // int i, y;
-    // FILE *inf;
-    // char help_line[MAX_HELP_LINE];
 
     /* In ask-dir page if user presses "yes" create directory in main loop */
 #if defined (commentout)
@@ -367,54 +359,10 @@ draw_help_page (char *helppage)
     } else if (strncmp (helppage, "mini-in-main.hlp", 17) == 0) {
 	/* do nothing */
     } else {
-	    /*
-	      FIXME: this block is way to large
-	     */
 	    /* This buffer is for the full path of the help file.
 	       The file might be either in the help directory (most cases),
 	       or in the temp directory (dynamically created pages). */
 	    mini_help_page(helppage,helppage_short);
-#if 0
-	    /* Open the file */
-	    asprintf (&helppage_full, "%s%s", help_path, helppage);
-	    inf = fopen (helppage_full, "r");
-	    if ( !inf ) {
-		    free(helppage_full);
-		    asprintf (&helppage_full, "%s%c%s", lc_save_dir, PATH_SLASH, helppage);
-		    inf = fopen (helppage_full, "r");
-	    }
-	    if (!inf) {
-		    free(helppage_full);
-		    asprintf (&helppage_full, "%s%s", help_path, HELPERRORPAGE);
-		    inf = fopen (helppage_full, "r");
-	    }
-	    if (!inf) {
-		    do_error ("Help error");
-	    }
-    
-	/* Parse and render help file */
-	numof_help_buttons = 0;
-	Fgl_fillbox (mw->x, mw->y, mw->w, mw->h, HELPBACKGROUNDCOLOUR);
-	while (feof (inf) == 0) {
-	    if (fgets (help_line, MAX_HELP_LINE, inf) == 0)
-		break;
-	    undosify_string (help_line);  /* GCS testing... */
-	    parse_helpline (help_line);
-	}
-	fclose (inf);
-
-	/* For ask-dir, we add path info */
-	if (strncmp (helppage_short, "ask-dir.hlp", 11) == 0) {
-	    parse_helpline ("tcolour 0 255");
-	    y = 100;
-	    for (i = 0; i < askdir_lines; i++) {
-		sprintf (help_line, "text -1 %d %s", y, askdir_path[i]);
-		parse_helpline (help_line);
-		y += 14;
-	    }
-	}
-	free (helppage_full);
-#endif	
     }
 
     /* At this point, most of the page has been rendered.  Now we have 
