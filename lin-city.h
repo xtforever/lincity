@@ -229,7 +229,6 @@ XXX: Then it shouldn't be here
 /* interest rate *10  ie 10 is 1% */
 #define INTEREST_RATE 15
 
-#define HELPERRORPAGE "error.hlp"
 #define HELPBACKGROUNDCOLOUR (white(8))
 #define HELPBUTTON_COLOUR (white(25))
 #define MAX_NUMOF_HELP_BUTTONS 40
