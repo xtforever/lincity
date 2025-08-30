@@ -271,14 +271,14 @@ parse_xargs (int argc, char **argv, char **geometry)
     int option;
     extern char *optarg;
 
-#ifdef ALLOW_PIX_DOUBLING
-    char* option_string = "vbrndg:wR:G:B:D";
-#else
-    char* option_string = "vbrng:wR:G:B:D";
-#endif
+    char* option_string = "Tvbrndg:wR:G:B:D";
+
     while ((option = getopt (argc, argv, option_string)) != EOF) {
 	switch (option)
 	{
+	case 'T':
+	    cheat_flag  = TRUE;
+	    break;
 	case 'v':
 	    verbose = TRUE;
 	    break;
