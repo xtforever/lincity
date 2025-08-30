@@ -17,6 +17,7 @@
 #include "simulate.h"
 #include "lcintl.h"
 #include "power.h"
+#include "screen.h"  // info_box
 #include "transport.h" /* for XY_IS_TRANSPORT */
 
 /* reset per map_power_grid run; how many different grids */
@@ -75,9 +76,10 @@ map_power_grid ()
 	for (mapy = 0; mapy < WORLD_SIDE_LEN; mapy++) {
 	    if (XY_IS_GRID(mapx,mapy)) {
 		if (MP_INFO(mapx,mapy).int_7 != grid_inc) {
-		    if (grid_num == MAX_GRIDS) {
-			    /* FIXME: replace with info_box */
-			printf("You have too many power grids.  Join some of them\n");
+
+			if (grid_num == MAX_GRIDS) {
+			    info_box("Power Grid",
+				          "You have too many power grids.  Join some of them");
 			return;
 		    }
 		    grid[++grid_num] = (Grid *)xmalloc(sizeof(Grid));
