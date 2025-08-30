@@ -76,10 +76,11 @@ map_power_grid ()
 	    if (XY_IS_GRID(mapx,mapy)) {
 		if (MP_INFO(mapx,mapy).int_7 != grid_inc) {
 		    if (grid_num == MAX_GRIDS) {
+			    /* FIXME: replace with info_box */
 			printf("You have too many power grids.  Join some of them\n");
 			return;
 		    }
-		    grid[++grid_num] = (Grid *)lcalloc(sizeof(Grid));
+		    grid[++grid_num] = (Grid *)xmalloc(sizeof(Grid));
 		    grid[grid_num]->total_power = 0;
 		    grid[grid_num]->power_lines = 0;
 		    grid[grid_num]->demand = 0;

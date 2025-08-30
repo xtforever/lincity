@@ -99,14 +99,17 @@ num_to_ansi_unit(char * s, size_t size, long num, char unit)
   switch(triplets) 
     {
     case 0: triplets = ' '; break;
-    case 1: triplets = 'k'; break; // kila
+    case 1: triplets = 'k'; break; // kilo
     case 2: triplets = 'm'; break; // mega
     case 3: triplets = 'g'; break; // giga 
     case 4: triplets = 't'; break; // tera 
     case 5: triplets = 'p'; break; // peta
     default: triplets = '?'; break;
     }
-      
+/*
+    FIXME:  %4.1   ->  1234.1 so min size is 8
+    usage: ?
+ */      
   if (size == 4)  /* to make up for format_pos_number4 */
     if (numf < 10) 
       snprintf(s, size, "%4.1f%c%c", numf, triplets, unit);
@@ -198,28 +201,13 @@ max_int (int i1, int i2)
 {
   return i1 > i2 ? i1 : i2;
 }
-/*
-  FIXME: bad name
- */
-void * 
-lcalloc (size_t size) 
-{
-  void * tmp;
-  tmp = malloc(size);
-  if (tmp == NULL) {
-    printf("couldn't malloc %d bytes!  Dying.\n",size);
-    exit(1);
-  }
   
-  return tmp;
-}
-
 void *xmalloc (size_t size) 
 {
   void * tmp;
   tmp = malloc(size);
   if (tmp == NULL) {
-    printf("couldn't malloc %d bytes!  Dying.\n",size);
+    printf("couldn't malloc %zd bytes!  Dying.\n",size);
     exit(1);
   }
   return tmp;
@@ -230,7 +218,7 @@ void *xcalloc (size_t nmemb, size_t size)
   void * tmp;
   tmp = calloc(nmemb,size);
   if (tmp == NULL) {
-    printf("couldn't calloc %d*%d bytes!  Dying.\n",nmemb,size);
+    printf("couldn't calloc %zd*%zd bytes!  Dying.\n",nmemb,size);
     exit(1);
   }
   return tmp;

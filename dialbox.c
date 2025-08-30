@@ -153,12 +153,12 @@ dialog_box(int arg_color, int argc, ...)
  */
 	    if (newline) {
 		int linelen = newline - working_str;
-		db_entry[dbn].text = (char *)lcalloc(1 + linelen);
+		db_entry[dbn].text = (char *)xmalloc(1 + linelen);
 		strncpy(db_entry[dbn].text,working_str,linelen);
 		db_entry[dbn].text[linelen] = '\0';
 		working_str = (newline + 1) != '\0' ? newline + 1 : NULL;
 	    } else {
-		db_entry[dbn].text = (char *)lcalloc(1 + strlen(working_str));
+		db_entry[dbn].text = (char *)xmalloc(1 + strlen(working_str));
 		strncpy(db_entry[dbn].text,working_str,strlen(working_str));
 		db_entry[dbn].text[strlen(working_str)] = '\0';
 		working_str = NULL;
@@ -302,7 +302,7 @@ dialog_refresh(void)
   }
 
   if (!db_screen_fresh) {
-      db_screen_buffer = (char *)lcalloc(dialog_window.w * dialog_window.h);
+	  db_screen_buffer = (char *)xcalloc(dialog_window.w , dialog_window.h);
       Fgl_getrect(&dialog_window,db_screen_buffer);
       db_screen_fresh = 1;
   };
