@@ -791,29 +791,37 @@ load_fonts()
     char s[LC_PATH_MAX];
     int i;
     FILE *inf;
+
     /* main_font */
-    if ((inf = fopen (fontfile, "rb")) == 0)
+    inf = fopen (fontfile, "rb");
+    if ( ! inf )
 	HandleError ("Can't open the font file", FATAL);
     for (i = 0; i < 256 * 8; i++)
 	main_font[i] = fgetc (inf);
     fclose (inf);
-    /* start_font1 */
+
+/* start_font1 */
     sprintf (s, "%s%c%s", opening_path, PATH_SLASH, "8x8thin");
-    if ((inf = fopen (s, "rb")) == NULL)
+    inf = fopen (s, "rb");
+    if ( !inf)
 	do_error ("Can't open opening screen font 8x8thin");
     for (i = 0; i < 2048; i++)
 	start_font1[i] = fgetc (inf);
     fclose (inf);
+
     /* start_font2 */
     sprintf (s, "%s%c%s", opening_path, PATH_SLASH, "scrawl_w.fnt");
-    if ((inf = fopen (s, "rb")) == NULL)
+    inf = fopen (s, "rb");
+    if ( !inf )
 	do_error ("Can't open opening screen font scrawl_w.fnt");
     for (i = 0; i < 4096; i++)
 	start_font2[i] = fgetc (inf);
     fclose (inf);
+    
     /* start_font3 */
     sprintf (s, "%s%c%s", opening_path, PATH_SLASH, "scrawl_s.fnt");
-    if ((inf = fopen (s, "rb")) == NULL)
+    inf = fopen (s, "rb");
+    if ( !inf)
 	do_error ("Can't open opening screen font scrawl_s.fnt");
     for (i = 0; i < 4096; i++)
 	start_font3[i] = fgetc (inf);
@@ -2252,13 +2260,16 @@ ok_dial_box (char *fn, int good_bad, char *xs)
 	strcpy (s, message_path);
 	strcat (s, fn);
     }
-
-    if ((inf = fopen (s, "rb")) == NULL)
+    
+    inf = fopen (s, "rb");
+    if ( !inf)
     {
 	printf ("Can't open message <%s> for OK dialog box\n", s);
 	strcpy (s, message_path);
 	strcat (s, "error.mes");
-	if ((inf = fopen (s, "rb")) == NULL)
+
+	inf = fopen (s, "rb");
+	if ( !inf )
 	{
 	    fprintf (stderr,
 		     "Can't open default message <%s> either\n", s);
@@ -2566,8 +2577,10 @@ dump_screen (void)
 #if !defined (LC_X11) && !defined (WIN32)
     int x, y, r, g, b;
     FILE *outf;
-    if ((outf = fopen ("screendump.raw", "wb")) == NULL)
+    outf = fopen ("screendump.raw", "wb");
+    if ( !outf)
 	do_error ("Can't open screendump.raw");
+
     for (y = 0; y < 480; y++)
 	for (x = 0; x < 640; x++)
 	{
