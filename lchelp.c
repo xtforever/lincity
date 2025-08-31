@@ -27,8 +27,16 @@
    is decremented by 2, and then incremented by one.
    */
 
-void
-activate_help (char *hp)
+static  void parse_tcolourline (char *);
+static  void parse_helpline (char *);
+static  void parse_textline (char *);
+static  void parse_iconline (char *);
+static  void draw_help_icon (int, int, char *);
+static  void parse_buttonline (char *);
+static  void do_help_buttons (int, int);
+static  void parse_tbuttonline (char *);
+
+void activate_help (char *hp)
 {
     help_flag = 1;
     help_history_count = 0;
@@ -133,6 +141,9 @@ draw_help_page (char *helppage)
        and "-1" means "Back".  Semantics for other arguments depend upon
        the name of the source page (e.g. load game or choose residence). 
        Most of the times (except "Back"), this will exit the help system. */
+/*
+  FIXME: this block is way to long
+ */
     if (strncmp (helppage, "return", 6) == 0) {
 	sscanf (&(helppage[6]), "%d", &help_return_val);
 
@@ -259,7 +270,7 @@ draw_help_page (char *helppage)
 		network_flag = 1;
 		break;
 	    }
-	}
+	} // help_history_count
 	else if (help_history_count > 0 &&
 		 strcmp (help_button_history[help_history_count - 1],
 			 "openload.hlp") == 0)
@@ -344,7 +355,7 @@ draw_help_page (char *helppage)
 #endif
 	refresh_main_screen ();
 	return;
-    }
+    } //strncmp (return)
 
  continue_with_help:
     /* This buffer is just a copy of helppage.  Sometimes helppage is an 
@@ -397,8 +408,7 @@ refresh_help_page (void)
     draw_help_page (help_button_history[help_history_count]);
 }
 
-void
-parse_helpline (char *s)
+static void  parse_helpline (char *s)
 {
     if (strncmp (s, "text", 4) == 0)
 	parse_textline (s);
@@ -412,7 +422,7 @@ parse_helpline (char *s)
 	parse_tcolourline (s);
 }
 
-void parse_tcolourline (char *st)
+static void parse_tcolourline (char *st)
 {
   char s[100];
   int f, b;
@@ -428,8 +438,7 @@ void parse_tcolourline (char *st)
     Fgl_setfontcolors (b, f);
 }
 
-void
-parse_textline (char *st)
+static void parse_textline (char *st)
 {
     Rect* mw = &scr.main_win;
     int i, j, x, y;
@@ -472,8 +481,7 @@ parse_textline (char *st)
 }
 
 
-void
-parse_iconline (char *st)
+static void parse_iconline (char *st)
 {
     int i, j, x, y;
     sscanf (st, "icon %d %d", &x, &y);
@@ -501,7 +509,7 @@ parse_iconline (char *st)
     draw_help_icon (x, y, st);
 }
 
-void
+static void
 draw_help_icon (int x, int y, char *icon)
 {
     Rect* mw = &scr.main_win;
@@ -541,7 +549,7 @@ draw_help_icon (int x, int y, char *icon)
     return;
 }
 
-void
+static void
 parse_buttonline (char *st)
 {
     Rect* mw = &scr.main_win;
@@ -604,7 +612,7 @@ parse_buttonline (char *st)
 	      mw->x + x + w, mw->y + y + h, HELPBUTTON_COLOUR);
 }
 
-void
+static void
 do_help_buttons (int x, int y)
 {
   int i;
@@ -623,7 +631,7 @@ do_help_buttons (int x, int y)
       }
 }
 
-void
+static void
 parse_tbuttonline (char *st)
 {
     char s[100], ss[120], s1[100];
