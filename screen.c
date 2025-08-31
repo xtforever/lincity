@@ -1370,8 +1370,9 @@ draw_mini_screen_power (void)
 #endif
 }
 
+#if 0
 /* GCS -- This is obsolete, right?? */
-void
+static void
 draw_mini_screen_ocost (void)
 {
     char s[100];
@@ -1494,6 +1495,7 @@ draw_mini_screen_ocost (void)
 
     Fgl_setfontcolors (TEXT_BG_COLOUR, TEXT_FG_COLOUR);
 }
+#endif
 
 #if defined (commentout)
 void
