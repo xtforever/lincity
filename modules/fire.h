@@ -9,5 +9,6 @@
 #define __fire_h__
 
 void do_fire(int x, int y);
+void mps_fire(int x, int y);
 
 #endif /* __fire_h__ */

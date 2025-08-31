@@ -20,8 +20,8 @@ do_fire (int x, int y)
   int i;
   /* this so we don't get whole blocks changing in one go. */
   if (MP_INFO(x,y).int_2 == 0)
-
     MP_INFO(x,y).int_2 = rand () % (FIRE_LENGTH / 5);
+  
   if (MP_INFO(x,y).int_2 > FIRE_LENGTH)
     {
       if (MP_INFO(x,y).int_4 == 0)	/* rand length here also */
@@ -54,6 +54,7 @@ do_fire (int x, int y)
       else if (MP_TYPE(x,y) == CST_FIRE_5)
 	MP_TYPE(x,y) = CST_FIRE_1;
     }
+
   if (MP_INFO(x,y).int_3 == -1)
     {
       if ((rand () % FIRE_DAYS_PER_SPREAD) == 1)
@@ -81,4 +82,12 @@ do_fire (int x, int y)
     MP_INFO(x,y).int_3 = real_time + 15000;	/* 15 secs seem fair */
   else if (real_time >= MP_INFO(x,y).int_3)
     MP_INFO(x,y).int_3 = -1;
+}
+
+void mps_fire(int x, int y)
+{
+	int i = 0;
+	mps_store_title(i++,_("Fire"));
+	i++;
+	mps_store_sd(i++,_("Length."),MP_INFO(x,y).int_2);
 }

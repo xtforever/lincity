@@ -10,6 +10,7 @@
 #include "modules/commune.h"
 #include "modules/cricket.h"
 #include "modules/firestation.h"
+#include "modules/fire.h"
 #include "modules/health_centre.h"
 #include "modules/heavy_industry.h"
 #include "modules/light_industry.h"

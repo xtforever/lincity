@@ -241,8 +241,11 @@ mps_update(void)
 	    case (GROUP_WINDMILL):
 	        mps_windmill (mps_x, mps_y);
 		break;
+	    case (GROUP_FIRE):
+	        mps_fire (mps_x, mps_y);
+		break;		
 	    default: 
-		printf("MPS unimplemented for that module\n");
+		    printf("MPS unimplemented for that module ( %d)\n",MP_GROUP(mps_x, mps_y) );
 		mps_style = MPS_NONE;
 	    }
 	}
