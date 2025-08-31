@@ -640,6 +640,16 @@ You may freely copy, distribute and modify lincity under the terms of the
 
 Please read the file COPYING for the GPL.
 
+Cheatmode
+=========
+For testing there is a cheat mode with option -T
+It enables the following keys:
+ e - people += 100;
+ d - dump_screen
+ t - tech += 1000;
+ T - tech += 10000;
+ m - 1.000.000
+
 THANK YOU
 =========
 This game could not have been possible without the patches, scripts, 
