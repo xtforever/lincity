@@ -15,13 +15,13 @@ void do_prefs_mouse (int, int, int);
 void refresh_help_page (void);
 extern void activate_help (char *);
 extern void draw_help_page (char *);
-extern void parse_tcolourline (char *);
-extern void parse_helpline (char *);
-extern void parse_textline (char *);
-extern void parse_iconline (char *);
-extern void draw_help_icon (int, int, char *);
-extern void parse_buttonline (char *);
-extern void do_help_buttons (int, int);
-extern void parse_tbuttonline (char *);
+// extern void parse_tcolourline (char *);
+// extern void parse_helpline (char *);
+// extern void parse_textline (char *);
+// extern void parse_iconline (char *);
+// extern void draw_help_icon (int, int, char *);
+// extern void parse_buttonline (char *);
+// extern void do_help_buttons (int, int);
+// extern void parse_tbuttonline (char *);
 
 #endif	/* __lchelp_h__ */
