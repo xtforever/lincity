@@ -37,6 +37,6 @@ void dialog_close(int return_value);
 #define DB_V_SPACE 2 /* Extra space above and below text */
 
 
-void dialog_close(int return_value) ;
+//void dialog_close(int return_value) ;
 
 #endif
