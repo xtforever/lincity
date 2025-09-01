@@ -1250,7 +1250,7 @@ extern void draw_mini_screen_ub40 (void);
 extern void draw_mini_screen_starve (void);
 extern void draw_mini_screen_coal (void);
 extern void draw_mini_screen_power (void);
-extern void draw_mini_screen_ocost (void);
+//extern void draw_mini_screen_ocost (void);
 extern void draw_mini_screen_port (void);
 extern void draw_mini_screen_cursor (void);
 extern void print_stats (void);
