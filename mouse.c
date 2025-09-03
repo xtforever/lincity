@@ -31,7 +31,7 @@ extern Update_Scoreboard update_scoreboard;
  * Private global variables
  * ---------------------------------------------------------------------- */
 static struct mouse_button_struct buttons[NUM_BUTTONS];
-static int mt_length; 
+static int mt_length;
 static int mt_grp;
 static char mt_name[20];
 static short mouse_buffer_fresh = 0;
@@ -49,10 +49,10 @@ static Mouse_Handle * mhandle_current;
 /* ---------------------------------------------------------------------- *
  * cs_mouse_handler
  * --
- * If the event was a mouse click or mouse release, enc_button contains 
- * the button identifier (e.g. LC_MOUSE_LEFTBUTTON) or'd with the 
- * action identifier (e.g. LC_MOUSE_RELEASE).  If the event was just a 
- * mouse move, then enc_button is 0.  You cannot specify multiple 
+ * If the event was a mouse click or mouse release, enc_button contains
+ * the button identifier (e.g. LC_MOUSE_LEFTBUTTON) or'd with the
+ * action identifier (e.g. LC_MOUSE_RELEASE).  If the event was just a
+ * mouse move, then enc_button is 0.  You cannot specify multiple
  * mouse buttons clicked at the same time using this interface.
  * ---------------------------------------------------------------------- */
 
@@ -86,7 +86,7 @@ cs_mouse_handler (int enc_button, int dx, int dy)
     if (cs_mouse_y < 0)
 	cs_mouse_y = 0;
 #endif
- 
+
     if (cs_mouse_x != x || cs_mouse_y != y)
 	move_mouse (cs_mouse_x, cs_mouse_y);
     x = cs_mouse_x;
@@ -100,8 +100,8 @@ cs_mouse_handler (int enc_button, int dx, int dy)
     if (button_pressed) {
 
 	/* maintain button press status */
-	pixel_to_mappoint(cs_mouse_x, cs_mouse_y, 
-			  &buttons[button_idx].mappoint_x, 
+	pixel_to_mappoint(cs_mouse_x, cs_mouse_y,
+			  &buttons[button_idx].mappoint_x,
 			  &buttons[button_idx].mappoint_y);
 	buttons[button_idx].x = cs_mouse_x;
 	buttons[button_idx].y = cs_mouse_y;
@@ -128,7 +128,7 @@ cs_mouse_handler (int enc_button, int dx, int dy)
 		    break;
 		}
 
-		else if (load_flag || save_flag) 
+		else if (load_flag || save_flag)
 		    return;
 
 		/* This is the main screen */
@@ -139,7 +139,7 @@ cs_mouse_handler (int enc_button, int dx, int dy)
 		}
 
 		/* GCS Remove overlay  */
-		/* This use of mouse clicks seems to contradict 
+		/* This use of mouse clicks seems to contradict
 		    Corey's mouse handler code */
 		if (main_screen_flag == MAIN_SCREEN_EQUALS_MINI) {
 		    main_screen_flag = MAIN_SCREEN_NORMAL_FLAG;
@@ -148,13 +148,13 @@ cs_mouse_handler (int enc_button, int dx, int dy)
 
 		/* Other points too */
 		do_mouse_other_buttons(x, y, button);
-	
+
 		break;
-	
+
 	    case LC_MOUSE_RIGHTBUTTON:
 	    case LC_MOUSE_MIDDLEBUTTON:
-		/* GCS FIX: This is my fix for right clicks on 
-		   main screen during yn_dialogs causing dialog to 
+		/* GCS FIX: This is my fix for right clicks on
+		   main screen during yn_dialogs causing dialog to
 		   be overwritten by screen content (similar effect
 		   for market_cb overwritten by mps).  This fix could
 		   be better, but will be better to confirm behavior
@@ -181,7 +181,7 @@ cs_mouse_handler (int enc_button, int dx, int dy)
 		else if (db_okflag) {
 		    break;
 		}
-		else if (load_flag || save_flag) 
+		else if (load_flag || save_flag)
 		    return;
 
 		/* GCS Remove overlay  */
@@ -202,21 +202,21 @@ cs_mouse_handler (int enc_button, int dx, int dy)
 
 		break;
 
-	    default: 
+	    default:
 		printf("Unknown mouse button in cs_mouse_handler\n");
 	    }
 	} /* mouse_handle_click couldn't. */
-    } else if (button_released) { 
+    } else if (button_released) {
 	button = enc_button - 16; /* probably shouldn't use this temporarily */
-      
-	pixel_to_mappoint(cs_mouse_x, cs_mouse_y, 
-			  &buttons[button_idx].r_mappoint_x, 
+
+	pixel_to_mappoint(cs_mouse_x, cs_mouse_y,
+			  &buttons[button_idx].r_mappoint_x,
 			  &buttons[button_idx].r_mappoint_y);
-      
+
 	buttons[button_idx].r_x = cs_mouse_x;
 	buttons[button_idx].r_y = cs_mouse_y;
 	buttons[button_idx].pressed = 0;
-      
+
 	switch (button) {
 	case LC_MOUSE_LEFTBUTTON:
 	    mt_draw(cs_mouse_x, cs_mouse_y, MT_SUCCESS);
@@ -225,14 +225,14 @@ cs_mouse_handler (int enc_button, int dx, int dy)
 	    break;
 	case LC_MOUSE_MIDDLEBUTTON:
 	    break;
-	default: 
+	default:
 	    break;
 	};
-	button = 0; /* backwards compatibility */      
+	button = 0; /* backwards compatibility */
 
 	/* mouse moved */
     } else {
-	if (buttons[LC_MOUSE_LEFTBUTTON-1].pressed 
+	if (buttons[LC_MOUSE_LEFTBUTTON-1].pressed
 	    && GROUP_IS_TRANSPORT(selected_module_group))
 	{
 	    mt_draw(cs_mouse_x, cs_mouse_y, MT_CONTINUE);
@@ -252,8 +252,8 @@ move_mouse (int x, int y)
     /* GCS: we don't check for load_flag/save_flag because these guys
        set db_flag = 1 */
     if (mouse_in_rect(&scr.main_win,x,y)
-	&& market_cb_flag == 0 && port_cb_flag == 0 
-	&& prefs_flag == 0 && help_flag == 0 
+	&& market_cb_flag == 0 && port_cb_flag == 0
+	&& prefs_flag == 0 && help_flag == 0
 	&& db_flag == 0 && db_okflag == 0)
     {
 	int mwoffset_x;
@@ -359,7 +359,7 @@ hide_square_mouse (void)
       Fgl_putbox (omx - 2, omy - 2, size + 4, 2, under_square_mouse_pointer_top);
       Fgl_putbox (omx - 2, omy, 2, size, under_square_mouse_pointer_left);
       Fgl_putbox (omx + size, omy, 2, size, under_square_mouse_pointer_right);
-      Fgl_putbox (omx - 2, omy + size, size + 4, 2, 
+      Fgl_putbox (omx - 2, omy + size, size + 4, 2,
 		  under_square_mouse_pointer_bottom);
       mouse_buffer_fresh = 0;
     } else {
@@ -475,7 +475,7 @@ do_mouse_main_win (int px, int py, int button)
     }
 
     /* Bring up mappoint_stats for any right mouse click */
-    /* XXX: Environmental (right click) MPS should show the clicked 
+    /* XXX: Environmental (right click) MPS should show the clicked
        square, not the master square */
     if (button == LC_MOUSE_RIGHTBUTTON) {
 	mps_set(mod_x, mod_y, MPS_ENV);
@@ -486,7 +486,7 @@ do_mouse_main_win (int px, int py, int button)
     /* XXX: put this in modules/rocket.c */
     /* XXX: wait for second click to ask for launch */
     if (button == LC_MOUSE_LEFTBUTTON) {
-	if (MP_TYPE(mod_x,mod_y) >= CST_ROCKET_5 && 
+	if (MP_TYPE(mod_x,mod_y) >= CST_ROCKET_5 &&
 	    MP_TYPE(mod_x,mod_y) <= CST_ROCKET_7) {
 	  if (ask_launch_rocket_click (mod_x,mod_y)) {
 	    launch_rocket (mod_x, mod_y);
@@ -495,10 +495,10 @@ do_mouse_main_win (int px, int py, int button)
     }
 
     /* Handle multitransport */
-    if (button == LC_MOUSE_LEFTBUTTON && 
+    if (button == LC_MOUSE_LEFTBUTTON &&
 	GROUP_IS_TRANSPORT(selected_module_group)) {
 	if (mt_draw (px, py, MT_START)) {
-	    /* We need to set mps to current location, since the user might 
+	    /* We need to set mps to current location, since the user might
 	       click on the transport to see the mps */
 
 	    mps_set(mod_x, mod_y, MPS_MAP);
@@ -532,8 +532,8 @@ do_mouse_main_win (int px, int py, int button)
 	return;
     }
 
-    /* OK, by now we are certain that the user wants to place the item.  
-       Set the origin based on the size of the selected_module_type, and 
+    /* OK, by now we are certain that the user wants to place the item.
+       Set the origin based on the size of the selected_module_type, and
        see if the selected item will fit. */
     size = main_groups[selected_module_group].size;
     if (px > (mw->x + mw->w) - size*16)
@@ -581,8 +581,8 @@ do_mouse_main_win (int px, int py, int button)
 	break;
     case -2:
 	/* Improper port placement */
-	/* TRANSLATORS: The part about the cup of tea is one of Ian's 
-	   jokes, but the part about ports needing to be connected 
+	/* TRANSLATORS: The part about the cup of tea is one of Ian's
+	   jokes, but the part about ports needing to be connected
 	   to rivers is true.  */
 	if (yn_dial_box (_("WARNING"),
 			 _("Ports need to be"),
@@ -652,8 +652,8 @@ do_mouse_other_buttons (int x, int y, int button)
 	adjust_main_origin (new_origin_x, main_screen_originy, 1);
     }
 
-    /* This is the mini window. Clicking here move the main window 
-       to this point 
+    /* This is the mini window. Clicking here move the main window
+       to this point
     */
 
 /*** Miniscreen selector buttons removed in CVS Revision 1.24 ***/
@@ -675,7 +675,8 @@ do_mouse_other_buttons (int x, int y, int button)
 	window_results ();
     }
 
-    /* XXX: WCK: This is broken; should be a mouse handler in 
+#if 0
+    /* XXX: WCK: This is broken; should be a mouse handler in
        mps.c anyway */
     /* Advance mps screen if clicked on */
     else if (mouse_in_rect (&scr.mappoint_stats,x,y)) {
@@ -695,6 +696,7 @@ do_mouse_other_buttons (int x, int y, int button)
 	}
 	mps_global_advance();
     }
+#endif
 
    /* Advance monthgraph screen if clicked on */
     else if (mouse_in_rect (&scr.monthgraph,x,y)) {
@@ -732,8 +734,8 @@ do_mouse_other_buttons (int x, int y, int button)
 	  return;
 	}
 #endif
-      
-      
+
+
 #if defined (commentout)
       /* GCS FIX -- This is obsolete, right??? */
       /*     -- If so, can delete scr.sust from geometry.c */
@@ -811,32 +813,32 @@ fire_area (int x, int y)
 
 /* XXX: Need to put this in a header somewhere */
 
-void 
-drag_screen (void) 
+void
+drag_screen (void)
 {
     int cur_mappoint_x = 0;
     int cur_mappoint_y = 0;
 
     int cur_winpoint_x = 0;
     int cur_winpoint_y = 0;
-  
+
     int origin_x = 0;
     int origin_y = 0;
 
     int in_main_window;
 
-    if (buttons[LC_MOUSE_MIDDLEBUTTON-1].mappoint_x == 0) 
+    if (buttons[LC_MOUSE_MIDDLEBUTTON-1].mappoint_x == 0)
 	return;   /* Not pressed in main window */
 
-    in_main_window = pixel_to_mappoint(cs_mouse_x, cs_mouse_y, 
+    in_main_window = pixel_to_mappoint(cs_mouse_x, cs_mouse_y,
 				       &cur_mappoint_x, &cur_mappoint_y);
-  
+
     pixel_to_winpoint(cs_mouse_x, cs_mouse_y, &cur_winpoint_x, &cur_winpoint_y);
-  
-    origin_x = 
-	    buttons[LC_MOUSE_MIDDLEBUTTON-1].mappoint_x - cur_winpoint_x;  
-    origin_y =  
-	    buttons[LC_MOUSE_MIDDLEBUTTON-1].mappoint_y - cur_winpoint_y;  
+
+    origin_x =
+	    buttons[LC_MOUSE_MIDDLEBUTTON-1].mappoint_x - cur_winpoint_x;
+    origin_y =
+	    buttons[LC_MOUSE_MIDDLEBUTTON-1].mappoint_y - cur_winpoint_y;
 
     adjust_main_origin (origin_x, origin_y, 1);
 }
@@ -868,14 +870,14 @@ do_market_cb_template (int x, int y, int is_market_cb)
     }
 
     /* jobs */
-    if (is_market_cb && y >= mcb->y + 36 + (CB_SPACE * 0) 
+    if (is_market_cb && y >= mcb->y + 36 + (CB_SPACE * 0)
       && y <= mcb->y + 52 + (CB_SPACE * 0))	{
 	int flag = is_sell ? FLAG_MS_JOBS : FLAG_MB_JOBS;
 	MP_INFO(mcbx,mcby).flags ^= flag;
 	draw_cb_box (0, is_sell, MP_INFO(mcbx,mcby).flags & flag);
     }
     /* food */
-    else if (y >= mcb->y + 36 + (CB_SPACE * 1) 
+    else if (y >= mcb->y + 36 + (CB_SPACE * 1)
       && y <= mcb->y + 52 + (CB_SPACE * 1)) {
 	int flag = is_sell ? FLAG_MS_FOOD : FLAG_MB_FOOD;
 	MP_INFO(mcbx,mcby).flags ^= flag;
@@ -889,14 +891,14 @@ do_market_cb_template (int x, int y, int is_market_cb)
 	draw_cb_box (2, is_sell, MP_INFO(mcbx,mcby).flags & flag);
     }
     /* ore */
-    else if (y >= mcb->y + 36 + (CB_SPACE * 3) 
+    else if (y >= mcb->y + 36 + (CB_SPACE * 3)
       && y <= mcb->y + 52 + (CB_SPACE * 3)) {
 	int flag = is_sell ? FLAG_MS_ORE : FLAG_MB_ORE;
 	MP_INFO(mcbx,mcby).flags ^= flag;
 	draw_cb_box (3, is_sell, MP_INFO(mcbx,mcby).flags & flag);
     }
     /* goods */
-    else if (y >= mcb->y + 36 + (CB_SPACE * 4) 
+    else if (y >= mcb->y + 36 + (CB_SPACE * 4)
       && y <= mcb->y + 52 + (CB_SPACE * 4)) {
 	int flag = is_sell ? FLAG_MS_GOODS : FLAG_MB_GOODS;
 	MP_INFO(mcbx,mcby).flags ^= flag;
@@ -931,7 +933,7 @@ do_port_cb_mouse (int x, int y)
     do_market_cb_template (x, y, 0);
 }
 
-void 
+void
 no_credit_build_msg (int selected_group)
 {
 #ifdef GROUP_POWER_SOURCE_NO_CREDIT
@@ -989,7 +991,7 @@ choose_residence (void)
 	     _("text -1 45 (LB=Low Birthrate HB=High Birthrate)\n"));
     fprintf (tempfile,
 	     _("text -1 55 (LD=Low Deathrate HD=High Deathrate)\n"));
-    fprintf (tempfile, 
+    fprintf (tempfile,
 	     _("text -1 85 Low Tech\n"));
 
     cost = get_group_cost(GROUP_RESIDENCE_LL);
@@ -1050,11 +1052,11 @@ choose_residence (void)
 
 
 /* We can only draw temporary transport on GROUP_TRACK, GROUP_ROAD,
-   GROUP_RAIL, or GROUP_BARE.  For temporary draws over GROUP_BARE, 
-   FLAG_IS_TRANSPORT is not set.  For temporary draws over existing 
-   transport of a different type, FLAG_IS_TRANSPORT is set, and 
-   FLAG_MULTI_TRANSPORT_PREV will be set to 0 if the existing transport is 
-   of the cheaper sort (e.g. GROUP_TRACK when overwriting with GROUP_ROAD), 
+   GROUP_RAIL, or GROUP_BARE.  For temporary draws over GROUP_BARE,
+   FLAG_IS_TRANSPORT is not set.  For temporary draws over existing
+   transport of a different type, FLAG_IS_TRANSPORT is set, and
+   FLAG_MULTI_TRANSPORT_PREV will be set to 0 if the existing transport is
+   of the cheaper sort (e.g. GROUP_TRACK when overwriting with GROUP_ROAD),
    and set to 1 if the existing transport if the more expensive sort
    (e.g. GROUP_RAIL when overwriting GROUP_ROAD).
 */
@@ -1087,7 +1089,7 @@ int mt_erase(int x, int y)
 	}
 	MP_INFO(x,y).flags &= ~FLAG_MULTI_TRANSPORT;
 	return 1;
-    } else if ((MP_INFO(x,y).flags & FLAG_IS_TRANSPORT) 
+    } else if ((MP_INFO(x,y).flags & FLAG_IS_TRANSPORT)
 	       && (mt_grp == MP_GROUP(x,y))) {
 	return 1;
     }
@@ -1117,7 +1119,7 @@ int mt_temp(int x, int y)
 	    MP_INFO(x,y).flags |= FLAG_MULTI_TRANSPORT;
 	    return 1;
 	}
-    } else if (MP_GROUP(x,y) == GROUP_BARE) { 
+    } else if (MP_GROUP(x,y) == GROUP_BARE) {
 	mt_length++;
 	MP_TYPE(x,y) = selected_module_type;
 	MP_GROUP(x,y) = mt_grp;
@@ -1142,7 +1144,7 @@ int mt_perm(int x, int y)
 	    place_item (x,y,selected_module_type);
 	    return 1;
 	}
-    } else if (MP_GROUP(x,y) == GROUP_BARE) { 
+    } else if (MP_GROUP(x,y) == GROUP_BARE) {
 	place_item (x,y,selected_module_type);
 	return 1;
     }
@@ -1211,9 +1213,9 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
     int draw_ret;
     char s[STATUS_MESSAGE_LENGTH];
 
-    if (flag != MT_START && !mt_flag) 
+    if (flag != MT_START && !mt_flag)
 	return 0;
-    
+
     pixel_to_mappoint(cxp, cyp,  &cx, &cy);
 
     switch(flag) {
@@ -1226,26 +1228,26 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
 	    /* If mt_erase failed it is because we don't have clearance
 	       to build the road.  So clean up and exit. */
 	    mt_flag = 0;
-	    draw_main_window_box (green (8)); 
+	    draw_main_window_box (green (8));
 	    status_message(0,0);
 	}
 	else if ((draw_ret = do_mt_draw(ox, cx, oy, cy, mt_perm))) {
 
 	    print_total_money ();
 	    mt_flag = 0;
-	    draw_main_window_box (green (8)); 
+	    draw_main_window_box (green (8));
 	    status_message(0,0);
 	} else {
 	    /* This shouldn't happen.  Clean up and continue anyway.  */
 	    mt_flag = 0;
 	    status_message(0,0);
-	    draw_main_window_box (green (8)); 
+	    draw_main_window_box (green (8));
 	}
 	dx = 0; dy = 0;
 	ox = 0; oy = 0;
 	break;
-      
-    case MT_FAIL:       
+
+    case MT_FAIL:
 	mt_flag = 0;
 	draw_main_window_box (green (8));
 	draw_ret = do_mt_draw(ox, dx, oy, dy, mt_erase);
@@ -1255,8 +1257,8 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
 	ox = 0; oy = 0;
 	break;
 
-    case MT_CONTINUE: 
-	if ((dx == cx && dy == cy) || ox == 0) 
+    case MT_CONTINUE:
+	if ((dx == cx && dy == cy) || ox == 0)
 	    return 0;
 	draw_ret = do_mt_draw(ox, dx, oy, dy, mt_erase);
 
@@ -1269,7 +1271,7 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
 	} else {
 	    snprintf(s,STATUS_MESSAGE_LENGTH-1,
 		     _("%d sections of %s will cost %3d to build"),
-		     mt_length, mt_name, 
+		     mt_length, mt_name,
 		     mt_length * get_type_cost(selected_module_type));
 	}
 
@@ -1309,10 +1311,10 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
     return (1);
 }
 
-int 
+int
 cmp(int n1, int n2)
 {
-    if (n1 != n2) 
+    if (n1 != n2)
 	return (n1 < n2) ? 1 : -1;
     else
 	return 0;
@@ -1330,7 +1332,7 @@ init_mouse_registry()
 /* Add and return an entry in the registry.  Add it at the beginning, so
    it supercedes earlier entries in mouse_handle_click() */
 Mouse_Handle *
-mouse_register(Rect * r, void (*function)(int, int, int)) 
+mouse_register(Rect * r, void (*function)(int, int, int))
 {
 	mhandle_current = (Mouse_Handle *)xcalloc(1,sizeof(Mouse_Handle));
     mhandle_count++;
@@ -1353,11 +1355,11 @@ mouse_register(Rect * r, void (*function)(int, int, int))
 
 
 /* Remove an entry from the registry */
-void 
+void
 mouse_unregister(Mouse_Handle * mhandle)
 {
     if (mhandle->prev == NULL) {
-	if (mhandle_first != mhandle) 
+	if (mhandle_first != mhandle)
 	    printf("debug: mhandle_first != mhandle\n");
 	if (mhandle->next != NULL) {
 	    mhandle_first = mhandle->next;
@@ -1376,25 +1378,24 @@ mouse_unregister(Mouse_Handle * mhandle)
     mhandle_count--;
 }
 
-/* Loop through the registry until we find a handler for an area.  
-   BEWARE!!!  Some handlers unregister themselves when called.  Assume 
+/* Loop through the registry until we find a handler for an area.
+   BEWARE!!!  Some handlers unregister themselves when called.  Assume
    mhandle_current is undefined after calling mhandle_current->handler()
 */
-int 
-mouse_handle_click(int x, int y, int button) 
+int
+mouse_handle_click(int x, int y, int button)
 {
     mhandle_current = mhandle_first;
 
     while (mhandle_current != NULL) {
 	if (mouse_in_rect(mhandle_current->r,x,y)) {
-	    mhandle_current->handler(x - mhandle_current->r->x, 
+	    mhandle_current->handler(x - mhandle_current->r->x,
 				     y - mhandle_current->r->y, button);
 	    return 1;
 	}
-	
+
 	mhandle_current = mhandle_current->next;
     }
 
     return 0;
 }
-    
