@@ -87,7 +87,31 @@ do_fire (int x, int y)
 void mps_fire(int x, int y)
 {
 	int i = 0;
+	char *p="";
 	mps_store_title(i++,_("Fire"));
 	i++;
 	mps_store_sd(i++,_("Length."),MP_INFO(x,y).int_2);
+
+	
+	if (MP_TYPE(x,y) == CST_FIRE_1)
+	p = LCT_FIRE_1_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_2)
+	p = LCT_FIRE_2_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_3)
+	p = LCT_FIRE_3_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_4)
+	p = LCT_FIRE_4_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_5)
+	p = LCT_FIRE_5_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_DONE1)
+	p = LCT_FIRE_DONE1_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_DONE2)
+	p = LCT_FIRE_DONE2_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_DONE3)
+	p = LCT_FIRE_DONE3_G;
+      else if (MP_TYPE(x,y) == CST_FIRE_DONE4)
+	p = LCT_FIRE_DONE4_G;
+
+	
+	mps_store_ss(i++,_("Type:"),p);
 }
