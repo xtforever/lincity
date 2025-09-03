@@ -26,8 +26,8 @@
 #include "market.h"
 #include "lclib.h"
 
-char mps_info[MAPPOINT_STATS_LINES][MPS_INFO_CHARS];
-int mps_global_style;
+static char mps_info[MAPPOINT_STATS_LINES][MPS_INFO_CHARS];
+int mps_global_style; // mouse.c
 
 static int mps_style;
 
@@ -146,6 +146,9 @@ mps_update(void)
     case MPS_MAP:
 	{
 	    switch(MP_GROUP(mps_x, mps_y)) {
+	    case GROUP_BARE:
+	    /* there is nothing */
+	       break;
 	    case (GROUP_BLACKSMITH):
 	        mps_blacksmith (mps_x, mps_y);
 		break;
@@ -160,6 +163,9 @@ mps_update(void)
 		break;
 	    case (GROUP_CRICKET):
 		mps_cricket (mps_x, mps_y);
+		break;
+	    case (GROUP_FIRE):
+	        mps_fire (mps_x, mps_y);
 		break;
 	    case (GROUP_FIRESTATION):
 	        mps_firestation (mps_x, mps_y);
@@ -220,6 +226,9 @@ mps_update(void)
 	    case GROUP_SOLAR_POWER:
 	        mps_solar_power (mps_x, mps_y);
 	        break;
+	    case (GROUP_SHANTY):
+	        mps_shanty (mps_x, mps_y);
+		break;
 	    case (GROUP_SUBSTATION):
 	        mps_substation (mps_x, mps_y);
 	        break;
@@ -241,9 +250,6 @@ mps_update(void)
 	    case (GROUP_WINDMILL):
 	        mps_windmill (mps_x, mps_y);
 		break;
-	    case (GROUP_FIRE):
-	        mps_fire (mps_x, mps_y);
-		break;		
 	    default: 
 		    printf("MPS unimplemented for that module ( %d)\n",MP_GROUP(mps_x, mps_y) );
 		mps_style = MPS_NONE;
