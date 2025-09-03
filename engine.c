@@ -24,9 +24,9 @@
 #include "mps.h"
 
 extern int selected_type_cost;
+static int is_real_river (int x, int y);
 
-int 
-adjust_money(int value)
+int adjust_money(int value)
 {
     total_money += value;
     print_total_money();
@@ -36,10 +36,9 @@ adjust_money(int value)
     return total_money;
 }
 
-int is_real_river (int x, int y);
 
-int
-no_credit_build (int selected_group)
+
+int no_credit_build (int selected_group)
 {
   if (total_money >= 0)
     return (0);
@@ -76,7 +75,61 @@ no_credit_build (int selected_group)
   return (0);
 }
 
-int 
+static int build_tip(int x, int y)
+{
+	/* Don't build a tip if there has already been one.  If we succeed,
+	   mark the spot permanently by "doubling" the ore reserve */
+	int i,j;
+
+	for (i=0;i<3;i++)
+		for (j=0;j<3;j++)
+			if (MP_INFO(x+i,y+j).ore_reserve > ORE_RESERVE)
+				goto prev_tip;
+
+	for (i=0;i<3;i++)
+		for (j=0;j<3;j++)
+			MP_INFO(x+i,y+j).ore_reserve = ORE_RESERVE * 2;
+
+	return 0;
+
+prev_tip:
+		dialog_box(red(12),3,
+			   0,0,_("You can't build a tip here"),
+			   0,0,_("This area was once a landfill"),
+			   2,' ',_("OK"));
+		return -4;
+}
+
+static int build_oremine(int x, int y)
+{
+	int i,j;
+        int total_ore=0;
+	for (i=0;i<3;i++) {
+		for (j=0;j<3;j++) {
+			total_ore += MP_INFO(x+i,y+j).ore_reserve;
+			if (MP_INFO(x+i,y+j).ore_reserve > ORE_RESERVE)
+				goto prev_tip;
+		}
+	}
+
+	if (total_ore >= MIN_ORE_RESERVE_FOR_MINE)
+		return 0;
+
+	dialog_box(red(12),3,
+		   0,0,_("You can't build a mine here"),
+		   0,0,_("There is no ore left at this site"),
+		   2,' ',_("OK"));
+	return -4;
+
+prev_tip:
+	dialog_box(red(12),3,
+		   0,0,_("You can't build a mine here"),
+		   0,0,_("This area was once a landfill"),
+		   2,' ',_("OK"));
+	return -4;
+}
+
+int
 place_item (int x, int y, short type)
 {
     int group;
@@ -103,9 +156,9 @@ place_item (int x, int y, short type)
     } break;
     case GROUP_PORT:
     {
-	if (is_real_river (x + 4, y) != 1 
+	if (is_real_river (x + 4, y) != 1
 	    || is_real_river (x + 4, y + 1) != 1
-	    || is_real_river (x + 4, y + 2) != 1 
+	    || is_real_river (x + 4, y + 2) != 1
 	    || is_real_river (x + 4, y + 3) != 1) {
 	    return -2;
 	}
@@ -127,65 +180,17 @@ place_item (int x, int y, short type)
     } break;
     case GROUP_TIP:
     {
-	/* Don't build a tip if there has already been one.  If we succeed,
-	   mark the spot permanently by "doubling" the ore reserve */
-	int i,j;
-	int prev_tip = 0;
-	for (i=0;i<3;i++) {
-	    for (j=0;j<3;j++) {
-		if (MP_INFO(x+i,y+j).ore_reserve > ORE_RESERVE) {
-		    prev_tip = 1;
-		    break;
-		}
-	    }
-	}
-	if (prev_tip) {
-	    dialog_box(red(12),3,
-		       0,0,_("You can't build a tip here"),
-		       0,0,_("This area was once a landfill"),
-		       2,' ',_("OK"));
-	    return -4;
-	} else {
-	    for (i=0;i<3;i++) {
-		for (j=0;j<3;j++) {
-		    MP_INFO(x+i,y+j).ore_reserve = ORE_RESERVE * 2;
-		}
-	    }
-	}
+	    if ( build_tip(x,y) < 0)
+		    return -4;
     } break;
+
     case GROUP_OREMINE:
     {
-	/* Don't allow new mines on old mines or old tips */
-	/* GCS: mines over old mines is OK if there is enough remaining 
-	        ore, as is the case when there is partial overlap. */
-	int i,j;
-	int prev_tip = 0;
-	int total_ore = 0;
-	for (i=0;i<3;i++) {
-	    for (j=0;j<3;j++) {
-		total_ore += MP_INFO(x+i,y+j).ore_reserve;
-		if (MP_INFO(x+i,y+j).ore_reserve > ORE_RESERVE) {
-		    prev_tip = 1;
-		    break;
-		}
-	    }
-	}
-	if (prev_tip) {
-	    dialog_box(red(12),3,
-		       0,0,_("You can't build a mine here"),
-		       0,0,_("This area was once a landfill"),
-		       2,' ',_("OK"));
-	    return -4;
-	}
-	if (total_ore < MIN_ORE_RESERVE_FOR_MINE) {
-	    dialog_box(red(12),3,
-		       0,0,_("You can't build a mine here"),
-		       0,0,_("There is no ore left at this site"),
-		       2,' ',_("OK"));
-	    return -4;
-	}
+	    if (build_oremine(x,y)<0)
+		    return -4;
     }
-    } /* end case */
+
+} /* end case */
 
     /* Store last_built for refund on "mistakes" */
     last_built_x = x;
@@ -230,7 +235,7 @@ place_item (int x, int y, short type)
     return 0;
 }
 
-int 
+int
 bulldoze_item (int x, int y)
 {
     int g, size;
@@ -598,7 +603,7 @@ remove_people (int num)
     }
 #endif
 
-  /* Note that the previous test was inaccurate.  There could be 
+  /* Note that the previous test was inaccurate.  There could be
      exactly 1000 people left. */
   if (!housed_population && !people_pool) {
     ok_dial_box ("launch-gone.mes", GOOD, 0L);
@@ -930,8 +935,7 @@ update_tech_dep (int x, int y)
     }
 }
 
-void
-connect_rivers (void)
+void connect_rivers (void)
 {
   int x, y, count;
   count = 1;
@@ -963,13 +967,12 @@ connect_rivers (void)
 		    MP_INFO(x,y + 1).flags |= FLAG_IS_RIVER;
 		    count++;
 		  }
-	      }
+	      } //if is_real_river (x, y)
 	  }
     }
 }
 
-int
-is_real_river (int x, int y)
+static int is_real_river (int x, int y)
 {
   /* returns zero if not water at all or if out of bounds. */
   if (x < 0 || x >= WORLD_SIDE_LEN || y < 0 || y >= WORLD_SIDE_LEN)
@@ -982,7 +985,7 @@ is_real_river (int x, int y)
 }
 
 /* Feature: coal survey should vary in price and accuracy with technology */
-void 
+void
 do_coal_survey (void)
 {
     if (coal_survey_done == 0) {
