@@ -12,5 +12,6 @@ void add_a_shanty(void);
 void remove_a_shanty(void);
 void update_shanty(void);
 void do_shanty(int x, int y);
+void mps_shanty(int x, int y);
 
 #endif /* __shanty_h__ */

@@ -115,8 +115,24 @@ do_shanty (int x, int y)
   if (get_coal (x, y, SHANTY_GET_COAL) != 0)
     if ((coal_tax -= SHANTY_GET_COAL * 2) < 0)
       coal_tax = 0;
+
   if ((total_time & 1) == 0)
     MP_POL(x,y)++;
   else
     MP_POL(x+1,y+1)++;
 }
+
+void mps_shanty(int x, int y)
+{
+        int i = 0;
+	double people, prob;
+	
+        mps_store_title(i++,_("Shanty town"));
+        i++;
+
+	people = people_pool - (COMMUNE_POP * numof_communes);
+	prob = (people - SHANTY_MIN_PP) / SHANTY_POP;
+	prob/=numof_shanties;
+	mps_store_sfp(i++,_("prob."),prob);
+}
+

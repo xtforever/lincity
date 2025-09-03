@@ -27,6 +27,7 @@
 #include "modules/road.h"
 #include "modules/rocket_pad.h"
 #include "modules/school.h"
+#include "modules/shanty.h"
 #include "modules/solar_power.h"
 #include "modules/substation.h"
 #include "modules/tip.h"
