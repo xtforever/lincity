@@ -88,14 +88,17 @@ do_organic_farm (int x, int y)
 				   + (ORGANIC_FARM_FOOD_OUTPUT / (4 * 8))) != 0)
 			MP_INFO(x,y).int_3++;
 	}
+
 	if ((total_time & 0x7f) == 0)
 		if ((MP_INFO(x,y).flags & FLAG_POWERED) != 0)
 			get_waste (x, y, 0x80 * ORG_FARM_WASTE_GET);
+
 	if ((total_time % 1200) == 0)
 	{
 		MP_INFO(x,y).int_4 = MP_INFO(x,y).int_3;
 		MP_INFO(x,y).int_3 = 0;
 	}
+
 	i = ((total_time + (MP_INFO(x,y).int_5 * 1200)
 	      + MP_INFO(x,y).int_6) % 4800);
 	if (i % 300 == 0)
@@ -166,7 +169,7 @@ do_organic_farm (int x, int y)
 		{
 			MP_TYPE(x,y) = CST_FARM_O0;
 		}
-	}
+	} // if (i%300)
 }
 
 void
