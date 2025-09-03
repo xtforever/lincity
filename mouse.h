@@ -85,7 +85,7 @@ void bulldoze_area (int, int);
 void fire_area (int, int);
 void do_market_cb_mouse (int, int);
 void do_port_cb_mouse (int, int);
-int is_real_river (int, int);
+//int is_real_river (int, int);
 void select_pause (void);
 void select_fast (void);
 void select_medium (void);
