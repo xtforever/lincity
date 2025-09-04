@@ -19,10 +19,10 @@ static Mouse_Handle * mhandle;
 
 static Rect * mbw = &scr.module_buttons;
 
-int module_type[NUMOF_MODULES];
-char *module_graphic[NUMOF_MODULES];
-int module_tflag[NUMOF_MODULES];
-char module_help[NUMOF_MODULES][20];
+static int module_type[NUMOF_MODULES];
+static char *module_graphic[NUMOF_MODULES];
+static int module_tflag[NUMOF_MODULES];
+static char module_help[NUMOF_MODULES][20];
 
 int module_help_flag[NUMOF_MODULES];
 
@@ -465,7 +465,7 @@ unhighlight_module_button (int module)
 /* draw_selected_module_cost: write info about the module to the status area */
 
 void
-draw_selected_module_cost ()
+draw_selected_module_cost (void)
 {
     Rect* b = &scr.select_message;
     char s[100];
