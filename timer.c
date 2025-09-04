@@ -84,7 +84,7 @@ void
 reset_start_time (void)
 {
 #if !defined (WIN32)
-  if (gettimeofday (&lc_timeval, 0) != 0)
+  if (gettimeofday (&lc_timeval, NULL) != 0)
     do_error ("Can't get timeofday");
   real_start_time = lc_timeval.tv_sec;
 #endif
@@ -98,7 +98,7 @@ get_real_time (void)
   const int CLOCKS_PER_MILLISECOND = CLOCKS_PER_SEC / 1000;
   real_time = (long) (clock () / CLOCKS_PER_MILLISECOND);
 #else
-  gettimeofday (&lc_timeval, 0);
+  gettimeofday (&lc_timeval, NULL);
   real_time = (lc_timeval.tv_sec - real_start_time) * 1000
     + (lc_timeval.tv_usec / 1000);
 #endif
