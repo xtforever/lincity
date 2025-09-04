@@ -46,7 +46,7 @@ void set_selected_module (int type);
 
 extern int sbut[NUMOF_MODULES];
 
-extern int module_type[NUMOF_MODULES];
+//extern int module_type[NUMOF_MODULES];
 
 extern int selected_module;	
 extern int old_selected_module;
