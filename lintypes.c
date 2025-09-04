@@ -1474,7 +1474,7 @@ void init_types(void)
 #endif
 
     main_types[CST_USED].group=GROUP_USED;
-    main_types[CST_USED].graphic=0;         /* Won't be dereferenced! */
+    main_types[CST_USED].graphic=NULL;         /* Won't be dereferenced! */
 }
 
 
