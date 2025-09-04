@@ -46,7 +46,7 @@ unsigned char main_font[2048];
 unsigned char start_font1[2048];
 unsigned char start_font2[4096];
 unsigned char start_font3[4096];
-Update_Scoreboard update_scoreboard;
+Update_Scoreboard update_scoreboard; //mouse.c
 
 int monthgraph_style = MONTHGRAPH_STYLE_MIN;
 
@@ -785,8 +785,7 @@ draw_small_yellow_bezel (int x, int y, int h, int w)
     }
 }
 
-void
-load_fonts(void)
+static void load_fonts(void)
 {
     char s[LC_PATH_MAX];
     int i;
@@ -1573,8 +1572,7 @@ draw_mini_screen_cursor (void)
 
 }
 
-void 
-initialize_print_stats (void)
+static void initialize_print_stats (void)
 {
 #if !defined (WIN32)
     hide_mouse ();
@@ -1834,8 +1832,7 @@ print_date (void)
 #endif
 }
 
-void
-print_population (void)
+static void print_population (void)
 {
     draw_pbar (&scr.pbar_pop, pop_pbar_graphic);
 }
@@ -1869,8 +1866,7 @@ print_time_for_year (void)
 }
 
 /* Write a message in the status area of the screen */
-void 
-status_message_1 (char * message) 
+static void status_message_1 (char * message) 
 {
     Rect* b = &scr.status_message_1;
 
@@ -1880,8 +1876,7 @@ status_message_1 (char * message)
     Fgl_write (b->x, b->y, message);
 }
 
-void 
-status_message_2 (char * message) 
+static void status_message_2 (char * message) 
 {
     Rect* b = &scr.status_message_2;
 
@@ -1913,8 +1908,7 @@ reset_status_message (void)
     update_scoreboard.message_area = 0;
 }
 
-void
-init_monthgraph (void)
+static void init_monthgraph (void)
 {
     Rect* mg = &scr.monthgraph;
     Fgl_fillbox (mg->x, mg->y, mg->w + 1, mg->h + 1, GRAPHS_B_COLOUR);
@@ -2089,8 +2083,7 @@ draw_cb_box (int row, int col, int checked)
     Fgl_putbox (x, y, 16, 16, graphic);
 }
 
-void
-draw_cb_template (int is_market_cb)
+static void draw_cb_template (int is_market_cb)
 {
     int x, y, flags;
     char s[100];
@@ -2303,8 +2296,7 @@ ok_dial_box (char *fn, int good_bad, char *xs)
     display_info_message (colour, ss, xs);
 }
 
-void
-format_status_message (char* sm1, char* sm2, int num_char, char* ss, char* xs)
+static void format_status_message (char* sm1, char* sm2, int num_char, char* ss, char* xs)
 {
     char* src = ss;
     char* tgt = sm1;
@@ -2573,8 +2565,7 @@ draw_sustline (int yoffset, int count, int max, int col)
 		 SUST_BAR_H, 0);
 }
 
-void
-dump_screen (void)
+void dump_screen (void)
 {
 #if !defined (LC_X11) && !defined (WIN32)
     int x, y, r, g, b;
