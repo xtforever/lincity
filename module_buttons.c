@@ -273,7 +273,7 @@ update_avail_modules (int popup)
        as the primative windmill? */
     if (tech_level > MODERN_WINDMILL_TECH && modern_windmill_flag == 0)
     {
-	ok_dial_box ("mod_wind_up.mes", GOOD, 0L);
+	ok_dial_box ("mod_wind_up.mes", GOOD, NULL);
 	modern_windmill_flag = 1;
     }
 }
@@ -286,71 +286,71 @@ activate_module (int module)
     module = inv_sbut (module);
 
     if (module == GROUP_WINDMILL)
-	ok_dial_box ("windmillup.mes", GOOD, 0L);
+	ok_dial_box ("windmillup.mes", GOOD, NULL);
     else if (module == GROUP_COAL_POWER)
-	ok_dial_box ("coalpowerup.mes", GOOD, 0L);
+	ok_dial_box ("coalpowerup.mes", GOOD, NULL);
     /*    else if (module == (GROUP_SOLAR_POWER - 1)) */
     else if (module == GROUP_SOLAR_POWER)
-	ok_dial_box ("solarpowerup.mes", GOOD, 0L);
+	ok_dial_box ("solarpowerup.mes", GOOD, NULL);
     else if (module == GROUP_COALMINE)
-	ok_dial_box ("coalmineup.mes", GOOD, 0L);
+	ok_dial_box ("coalmineup.mes", GOOD, NULL);
     else if (module == GROUP_RAIL)
-	ok_dial_box ("railwayup.mes", GOOD, 0L);
+	ok_dial_box ("railwayup.mes", GOOD, NULL);
     else if (module == GROUP_ROAD)
-	ok_dial_box ("roadup.mes", GOOD, 0L);
+	ok_dial_box ("roadup.mes", GOOD, NULL);
     else if (module == GROUP_INDUSTRY_L)
-	ok_dial_box ("ltindustryup.mes", GOOD, 0L);
+	ok_dial_box ("ltindustryup.mes", GOOD, NULL);
     else if (module == GROUP_UNIVERSITY)
-	ok_dial_box ("universityup.mes", GOOD, 0L);
+	ok_dial_box ("universityup.mes", GOOD, NULL);
     else if (module == GROUP_OREMINE)
     {
 	if (GROUP_OREMINE_TECH > 0)
-	    ok_dial_box ("oremineup.mes", GOOD, 0L);
+	    ok_dial_box ("oremineup.mes", GOOD, NULL);
     }
     else if (module == GROUP_PORT)	/* exports are the same */
-	ok_dial_box ("import-exportup.mes", GOOD, 0L);
+	ok_dial_box ("import-exportup.mes", GOOD, NULL);
     else if (module == GROUP_INDUSTRY_H)
-	ok_dial_box ("hvindustryup.mes", GOOD, 0L);
+	ok_dial_box ("hvindustryup.mes", GOOD, NULL);
     else if (module == GROUP_PARKLAND)
     {
 	if (GROUP_PARKLAND_TECH > 0)
-	    ok_dial_box ("parkup.mes", GOOD, 0L);
+	    ok_dial_box ("parkup.mes", GOOD, NULL);
     }
     else if (module == GROUP_RECYCLE)
-	ok_dial_box ("recycleup.mes", GOOD, 0L);
+	ok_dial_box ("recycleup.mes", GOOD, NULL);
     else if (module == GROUP_RIVER)
     {
 	if (GROUP_WATER_TECH > 0)
-	    ok_dial_box ("riverup.mes", GOOD, 0L);
+	    ok_dial_box ("riverup.mes", GOOD, NULL);
     }
     else if (module == GROUP_HEALTH)
-	ok_dial_box ("healthup.mes", GOOD, 0L);
+	ok_dial_box ("healthup.mes", GOOD, NULL);
     else if (module == GROUP_ROCKET)
-	ok_dial_box ("rocketup.mes", GOOD, 0L);
+	ok_dial_box ("rocketup.mes", GOOD, NULL);
     else if (module == GROUP_SCHOOL)
     {
 	if (GROUP_SCHOOL_TECH > 0)
-	    ok_dial_box ("schoolup.mes", GOOD, 0L);
+	    ok_dial_box ("schoolup.mes", GOOD, NULL);
     }
     else if (module == GROUP_BLACKSMITH)
     {
 	if (GROUP_BLACKSMITH_TECH > 0)
-	    ok_dial_box ("blacksmithup.mes", GOOD, 0L);
+	    ok_dial_box ("blacksmithup.mes", GOOD, NULL);
     }
     else if (module == GROUP_MILL)
     {
 	if (GROUP_MILL_TECH > 0)
-	    ok_dial_box ("millup.mes", GOOD, 0L);
+	    ok_dial_box ("millup.mes", GOOD, NULL);
     }
     else if (module == GROUP_POTTERY)
     {
 	if (GROUP_POTTERY_TECH > 0)
-	    ok_dial_box ("potteryup.mes", GOOD, 0L);
+	    ok_dial_box ("potteryup.mes", GOOD, NULL);
     }
     else if (module == GROUP_FIRESTATION)
-	ok_dial_box ("firestationup.mes", GOOD, 0L);
+	ok_dial_box ("firestationup.mes", GOOD, NULL);
     else if (module == GROUP_CRICKET)
-	ok_dial_box ("cricketup.mes", GOOD, 0L);
+	ok_dial_box ("cricketup.mes", GOOD, NULL);
 }
     
 
@@ -385,7 +385,7 @@ void
 select_module (int module, int mbutton)
 {
     if (module_tflag[module] == 0 && mbutton != LC_MOUSE_RIGHTBUTTON) {
-	ok_dial_box ("not_enough_tech.mes", BAD, 0L);
+	ok_dial_box ("not_enough_tech.mes", BAD, NULL);
 	return;
     }
     if (mbutton == LC_MOUSE_RIGHTBUTTON 
