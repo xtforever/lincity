@@ -6,6 +6,8 @@
 #include "engglobs.h"
 #include "common.h"
 #include "fileutil.h"
+#include "cliglobs.h"
+#include "shrglobs.h"
 
 Map map;
 
