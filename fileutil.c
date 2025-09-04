@@ -111,7 +111,7 @@ static const char *guess_category_value (int category,
 #ifdef LIBDIR
 #undef LIBDIR
 #endif
-char LIBDIR[LC_PATH_MAX];
+static char LIBDIR[LC_PATH_MAX];
 
 char *lc_save_dir;
 int lc_save_dir_len;
@@ -160,7 +160,7 @@ _access (const char *path, int mode)
 #endif
 
 /* Executes a system command */
-int
+static int
 execute_command (char *cmd, char *p1, char *p2, char *p3)
 {
 	char *sys_cmd;
@@ -172,8 +172,8 @@ execute_command (char *cmd, char *p1, char *p2, char *p3)
 	return ret_value;
 }
 
-void
-copy_file (char *f1, char *f2)
+#if 0
+static void copy_file (char *f1, char *f2)
 {
   int ret_value = execute_command ("cp", f1, f2, "");
   if (ret_value != 0)
@@ -183,6 +183,7 @@ copy_file (char *f1, char *f2)
       do_error ("Can't copy requested file");
     }
 }
+#endif
 
 void
 gunzip_file (char *f1, char *f2)
@@ -276,8 +277,7 @@ file_exists (char *filename)
 }
 
 #if defined (WIN32)
-void
-find_libdir (void)
+static void find_libdir (void)
 {
     const char searchfile[] = "Colour.pal";
     /* default_dir will be something like "C:\\LINCITY1.11" */
@@ -429,8 +429,7 @@ lincity_nl_find_language (char *name)
 }
 
 
-void
-find_localized_paths (void)
+static void find_localized_paths (void)
 {
   int messages_done = 0;
   int help_done = 0;
@@ -582,7 +581,7 @@ verify_package (void)
 {
     FILE *fp = fopen (colour_pal_file,"rb");
     if (!fp) {
-	do_error (_("Error verifying package. Can't find colour.pal."));
+        do_error (_("Error verifying package. Can't find colour.pal."));
     }
     fclose (fp);
 }
@@ -654,14 +653,14 @@ check_savedir (void)
     make_dir_ok_flag = 0;		/* don't load the ask-dir */
 #endif
 }
-
+#if 0
 void
 malloc_failure (void)
 {
   printf (_("Out of memory: malloc failure\n"));
   exit (1);
 }
-
+#endif
 char*load_graphic(char *s)
 {
     int x,l;
