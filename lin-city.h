@@ -1138,8 +1138,8 @@ extern void load_city (char *);
 extern void reset_animation_times (void);
 extern void coal_reserve_setup (void);
 extern void ore_reserve_setup (void);
-extern void setup_river (void);
-extern void setup_river2 (int, int, int);
+//extern void setup_river (void);
+//extern void setup_river2 (int, int, int);
 extern void check_savedir (void);
 extern void make_savedir (void);
 extern void draw_save_dir (int);
@@ -1178,7 +1178,7 @@ extern void HandleError (char *, int);
   fileutil
   ********
 */
-void malloc_failure (void);
+//void malloc_failure (void);
 FILE* fopen_read_gzipped (char* fn);
 void fclose_read_gzipped (FILE* fp);
 void verify_package (void);
