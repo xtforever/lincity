@@ -120,7 +120,7 @@ main (int argc, char *argv[])
 }
 #endif
 
-void
+static void
 lincity_set_locale (void)
 {
     char* locale = NULL;
@@ -214,7 +214,7 @@ lincity_main (int argc, char *argv[])
     /* Initialize random number generator */
 #ifndef CS_PROFILE
 #ifdef SEED_RAND
-    srand (time (0));
+    srand (time (NULL));
 #endif
 #endif
 
@@ -864,7 +864,7 @@ window_results (void)
     if (compile_results () == 0)
 	return;
     asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, RESULTS_FILENAME);
-    ok_dial_box (s, RESULTS, 0L);
+    ok_dial_box (s, RESULTS, NULL);
     free(s);
 }
 
