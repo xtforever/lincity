@@ -21,11 +21,11 @@
 #include "transport.h" /* for XY_IS_TRANSPORT */
 
 /* reset per map_power_grid run; how many different grids */
-int grid_num = 0;
+static int grid_num = 0;
 
 /* grid map time stampt.  Incremented per map_power_grid run,
    used to determine if a square has been mapped */
-int grid_inc = 0;
+static int grid_inc = 0;
 
 Grid * grid[MAX_GRIDS];
 
