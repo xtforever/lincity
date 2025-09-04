@@ -509,8 +509,7 @@ Fgl_setpixel (int x, int y, int col)
 #endif
 }
 
-int
-Fgl_getpixel (int x, int y)
+static int Fgl_getpixel (int x, int y)
 {
     return pixmap_getpixel (x, y);
 }
@@ -656,7 +655,7 @@ clamp (int x, int low, int high)
  * `bpl' is the width of that array.
  * No clipping performed.
  */
-void
+static void
 Fgl_putbox_low (Drawable dst, int x0, int y0, int x1, int y1,
 		int w, int h, unsigned char *src, int bpl,
 		int src_x, int src_y)
@@ -670,15 +669,15 @@ Fgl_putbox_low (Drawable dst, int x0, int y0, int x1, int y1,
     const int pmult = 1;
 #endif
 
-    im = XCreateImage (display.dpy, 0,	/* display and visual */
+    im = XCreateImage (display.dpy, NULL,	/* display and visual */
 		       DefaultDepth (display.dpy, display.screen),	/* depth */
 		       ZPixmap,	/* format */
 		       0,		/* offset */
-		       0,		/* data */
+		       NULL,		/* data */
 		       pmult * w, pmult * h,	/* width and height */
 		       32, 0);	/* bitmap_pad and bytes_per_line */
     /* XXX: assert is not the right way to check for errors - wck */
-    assert (im != 0);
+//    assert (im != 0);
     im->data = (char *) xcalloc (im->bytes_per_line , pmult * h);
 
     src += src_x + src_y * bpl;
