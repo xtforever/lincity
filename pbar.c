@@ -17,6 +17,9 @@
 
 struct pbar_st pbars[NUM_PBARS];
 
+/*
+  FIXME: use memset() ?
+ */
 void
 init_pbars (void)
 {
@@ -29,7 +32,6 @@ init_pbars (void)
 	for (i = 0; i < PBAR_DATA_SIZE; i++)
 	    pbars[p].data[i] = 0;
     }
-
 }
 
 void
@@ -235,7 +237,7 @@ update_pbar (int pbar_num, int value, int month_flag)
 }
 
 void
-update_pbars_daily()
+update_pbars_daily(void)
 {
     update_pbar (PPOP, housed_population + people_pool, 0);
     update_pbar (PTECH, tech_level, 0);
@@ -249,7 +251,7 @@ update_pbars_daily()
 }
 
 void
-update_pbars_monthly()
+update_pbars_monthly(void)
 {
     update_pbar (PPOP, housed_population + people_pool, 1);
     update_pbar (PTECH, tech_level, 1);
