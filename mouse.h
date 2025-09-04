@@ -48,7 +48,7 @@ struct mouse_button_struct {
 /* Public functions */
 
 void mouse_setup (void);
-void init_mouse_registry();
+void init_mouse_registry(); //main.c
 int mouse_handle_click(int x, int y, int button); 
 
 Mouse_Handle * mouse_register(Rect * r, void (*handler)(int, int, int));
@@ -63,7 +63,7 @@ void do_mouse_main_win (int, int, int);
 void drag_screen (void);
 
 /* Private functions */
-int cmp(int, int);
+//int cmp(int, int);
 
 /* WCK: These were in lin-city.h */
 
