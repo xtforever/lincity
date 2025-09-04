@@ -686,6 +686,14 @@ screen_full_refresh (void)
     draw_help ();
 #endif
     draw_pause (pause_flag);
+    /*
+      FIXME: what is intended here ?
+      if (!pause_flag) {
+            draw_slow(); 
+             draw_med ();
+            draw_fast();
+      }
+     */
     draw_slow (slow_flag & !pause_flag);
     draw_med (med_flag & !pause_flag);
     draw_fast (fast_flag & !pause_flag);
@@ -1831,11 +1839,12 @@ print_date (void)
     UpdateWindow (display.hWnd);
 #endif
 }
-
+#if 0
 static void print_population (void)
 {
     draw_pbar (&scr.pbar_pop, pop_pbar_graphic);
 }
+#endif
 
 void 
 calculate_time_for_year (void)
@@ -1907,12 +1916,13 @@ reset_status_message (void)
 #endif
     update_scoreboard.message_area = 0;
 }
-
+#if 0
 static void init_monthgraph (void)
 {
     Rect* mg = &scr.monthgraph;
     Fgl_fillbox (mg->x, mg->y, mg->w + 1, mg->h + 1, GRAPHS_B_COLOUR);
 }
+#endif
 
 void
 clear_monthgraph (void)
@@ -2277,7 +2287,9 @@ ok_dial_box (char *fn, int good_bad, char *xs)
     ss = (char *)xmalloc(statbuf.st_size + 1);
     retval = fread(ss,sizeof(char),statbuf.st_size,inf);
     ss[statbuf.st_size] = '\0';
-
+// FIXME: make compiler happy
+    retval=retval; 
+    
     undosify_string (ss);
 
 #if defined (commentout)
