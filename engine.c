@@ -477,7 +477,7 @@ sell_steel (int xt, int yt)
 }
 
 void
-do_pollution ()
+do_pollution (void)
 {
   int x, p;
   int* pol = &map.pollution[0][0];
