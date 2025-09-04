@@ -35,7 +35,7 @@ Grid * grid[MAX_GRIDS];
    first-served basis.
 */
 void
-power_time_step () 
+power_time_step (void) 
 {
     int gi;
     int net; /* net power */
@@ -66,7 +66,7 @@ power_time_step ()
 
 
 void 
-map_power_grid ()
+map_power_grid (void)
 {
     int mapx, mapy;
     grid_num = 0;  /* how many grids found so far */
