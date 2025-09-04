@@ -125,7 +125,7 @@ refresh_main_screen (void)
 }
 
 void 
-clip_main_window ()
+clip_main_window (void)
 {
     Rect* b = &scr.main_win;
     Fgl_enableclipping ();
@@ -133,7 +133,7 @@ clip_main_window ()
 }
 
 void 
-unclip_main_window ()
+unclip_main_window (void)
 {
     Fgl_disableclipping ();
 }
@@ -786,7 +786,7 @@ draw_small_yellow_bezel (int x, int y, int h, int w)
 }
 
 void
-load_fonts()
+load_fonts(void)
 {
     char s[LC_PATH_MAX];
     int i;
