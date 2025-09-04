@@ -48,10 +48,12 @@ load_png_graphics (char *txt_filename, char *png_filename)
     FILE *fp, *txt_fp;
     png_bytep *row_pointers;
 
-    if ((fp = fopen(png_filename, "rb")) == NULL)
+    fp = fopen(png_filename, "rb");
+    if ( fp  == NULL)
 	return (ERROR);
 
-    if ((txt_fp = fopen(txt_filename, "r")) == NULL)
+    txt_fp = fopen(txt_filename, "r");
+    if ( txt_fp == NULL)
 	return (ERROR);
 
     /* Create and initialize the png_struct with the desired error handler
@@ -558,6 +560,12 @@ load_png_graphics (char *txt_filename, char *png_filename)
     return (OK);
 }
 
+/*
+  Warning: load_png_graphics ()
+  FIXME:
+  1. bad name
+  2. there is no usefull return use void
+ */
 static char* 
 load_png_graphic (short type, short group, char* id,
 		  FILE* txt_fp,png_bytep *row_pointers, 
@@ -566,7 +574,7 @@ load_png_graphic (short type, short group, char* id,
     char buf[128];
     char *fnp,*rip,*cip;
     int ri,ci;
-    char *grphc = 0;
+    char *grphc = NULL;
 
     while (!feof(txt_fp)) {
 	/* Get line from text file */
@@ -611,5 +619,5 @@ load_png_graphic (short type, short group, char* id,
 	fprintf (stderr,"Error, couldn't find id string");
 	exit(1);
     }
-    return 0;
+    return NULL;
 }
