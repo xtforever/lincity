@@ -9,6 +9,7 @@
 #include "lin-city.h"
 #include "lctypes.h"
 #include "lintypes.h"
+#include "readpng.h"
 
 /* Read a PNG file.  You may want to return an error code if the read
  * fails (depending upon the failure).  There are two "prototypes" given
@@ -26,13 +27,13 @@ load_png_graphic (short type, short group, char* id,
 		  png_uint_32 width, png_uint_32 height);
 
 /* Let errors and warnings be handled by setjmp/longjmp */
-void* user_error_ptr = 0;
+static void* user_error_ptr = NULL;
 
-void user_error_fn(png_structp png_ptr, png_const_charp error_msg)
+static void user_error_fn(png_structp png_ptr, png_const_charp error_msg)
 {
 }
 
-void user_warning_fn(png_structp png_ptr, png_const_charp warning_msg)
+static void user_warning_fn(png_structp png_ptr, png_const_charp warning_msg)
 {
 }
 
