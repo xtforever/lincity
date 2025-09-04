@@ -1900,8 +1900,8 @@ status_message (char* m1, char* m2)
 void
 reset_status_message (void)
 {
-    status_message_1(0);
-    status_message_2(0);
+    status_message_1(NULL);
+    status_message_2(NULL);
 #if defined (WIN32)
     UpdateWindow (display.hWnd);
 #endif
@@ -2521,7 +2521,7 @@ do_sust_barchart (int draw)
       && sust_fire_count >= SUST_FIRE_YEARS_NEEDED)
     {
       if (sustain_flag == 0)
-	ok_dial_box ("sustain.mes", GOOD, 0L);
+	ok_dial_box ("sustain.mes", GOOD, NULL);
       sustain_flag = 1;
     }
   else
@@ -2617,13 +2617,13 @@ display_rocket_result_dialog (int result)
 {
     switch (result) {
     case ROCKET_LAUNCH_BAD:
-	ok_dial_box ("launch-fail.mes", BAD, 0L);
+	ok_dial_box ("launch-fail.mes", BAD, NULL);
 	break;
     case ROCKET_LAUNCH_GOOD:
-	ok_dial_box ("launch-good.mes", GOOD, 0L);
+	ok_dial_box ("launch-good.mes", GOOD, NULL);
 	break;
     case ROCKET_LAUNCH_EVAC:
-	ok_dial_box ("launch-evac.mes", GOOD, 0L);
+	ok_dial_box ("launch-evac.mes", GOOD, NULL);
 	break;
     }
 }
