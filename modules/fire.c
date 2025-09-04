@@ -94,24 +94,23 @@ void mps_fire(int x, int y)
 
 	
 	if (MP_TYPE(x,y) == CST_FIRE_1)
-	p = LCT_FIRE_1_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_2)
-	p = LCT_FIRE_2_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_3)
-	p = LCT_FIRE_3_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_4)
-	p = LCT_FIRE_4_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_5)
-	p = LCT_FIRE_5_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_DONE1)
-	p = LCT_FIRE_DONE1_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_DONE2)
-	p = LCT_FIRE_DONE2_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_DONE3)
-	p = LCT_FIRE_DONE3_G;
-      else if (MP_TYPE(x,y) == CST_FIRE_DONE4)
-	p = LCT_FIRE_DONE4_G;
+		p = LCT_FIRE_1_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_2)
+		p = LCT_FIRE_2_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_3)
+		p = LCT_FIRE_3_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_4)
+		p = LCT_FIRE_4_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_5)
+		p = LCT_FIRE_5_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_DONE1)
+		p = LCT_FIRE_DONE1_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_DONE2)
+		p = LCT_FIRE_DONE2_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_DONE3)
+		p = LCT_FIRE_DONE3_G;
+	else if (MP_TYPE(x,y) == CST_FIRE_DONE4)
+		p = LCT_FIRE_DONE4_G;
 
-	
 	mps_store_ss(i++,_("Type:"),p);
 }
