@@ -91,8 +91,6 @@ int verify_city (char *cname);
  * Private Global Variables
  * ---------------------------------------------------------------------- */
 
-
-
 /* ---------------------------------------------------------------------- *
  * Public functions
  * ---------------------------------------------------------------------- */
@@ -110,10 +108,10 @@ remove_scene (char *cname)
     free (s);
 }
 
-void
-save_city_raw (char *cname)
+static void save_city_raw (char *cname)
 {
-    int x, y, z, q, n, p;
+    int x, y, z,  n, p;
+//    int q;
 #if defined (WIN32)
     FILE *ofile = fopen (cname, "wb");
 #else
@@ -125,7 +123,7 @@ save_city_raw (char *cname)
     }
 
     fprintf (ofile, "%d\n", (int) VERSION_INT);
-    q = sizeof (Map_Point_Info);
+//    q = sizeof (Map_Point_Info);
     prog_box (_("Saving scene"), 0);
     check_endian ();
     for (x = 0; x < WORLD_SIDE_LEN; x++) {
@@ -334,23 +332,23 @@ save_city (char *cname)
     free (s4);
 }
 
-void
-load_city (char *cname)
+void load_city (char *cname)
 {
-    unsigned long q;
+//    unsigned long q;
     int i, x, y, z, n, p, ver;
     int num_pbars, pbar_data_size;
     int pbar_tmp;
     int dummy;
     FILE *ofile;
     char s[256];
-    if ((ofile = fopen_read_gzipped (cname)) == NULL) {
+    ofile = fopen_read_gzipped (cname);
+    if ( !ofile ) {
 	printf (_("Can't open <%s> (gzipped)"), cname);
 	do_error ("Can't open it!");
     }
     fscanf (ofile, "%d", &ver);
     if (ver < MIN_LOAD_VERSION) {
-	ok_dial_box ("too-old.mes", BAD, 0L);
+	ok_dial_box ("too-old.mes", BAD, NULL);
 	fclose_read_gzipped (ofile);
 	return;
     }
@@ -362,7 +360,7 @@ load_city (char *cname)
     init_inventory();
     
     print_time_for_year();
-    q = (unsigned long) sizeof (Map_Point_Info);
+//    q = (unsigned long) sizeof (Map_Point_Info);
     prog_box (_("Loading scene"), 0);
 
     for (x = 0; x < WORLD_SIDE_LEN; x++) {
@@ -702,6 +700,9 @@ verify_city (char *cname)
     return v == VERSION_INT;
 }
 
+/*
+  FIXME: any user ?
+ */
 #ifdef MP_SANITY_CHECK
 void
 sanity_check (void)
