@@ -82,6 +82,7 @@
 #include "cliglobs.h"
 #include "engglobs.h"
 #include "fileutil.h"
+#include "screen.h"
 
 /* GCS: This is from dcgettext.c in the gettext package.      */
 /* XPG3 defines the result of `setlocale (category, NULL)' as:
@@ -178,7 +179,7 @@ static void copy_file (char *f1, char *f2)
   int ret_value = execute_command ("cp", f1, f2, "");
   if (ret_value != 0)
     {
-      /* GCS FIX:  Need to make do_error into var_args fn? */
+	    /* GCS FIX:  Need to make do_error into var_args fn? */
       printf ("Tried to cp %s %s\n", f1, f2);
       do_error ("Can't copy requested file");
     }
@@ -191,9 +192,11 @@ gunzip_file (char *f1, char *f2)
   int ret_value = execute_command ("gzip -c -d", f1, ">", f2);
   if (ret_value != 0)
     {
-      /* GCS FIX:  Need to make do_error into var_args fn? */
-      printf ("Tried to gzip -c -d %s > %s\n", f1, f2);
-      do_error ("Can't gunzip requested file");
+	    info_box("gunzip","Tried to gzip -c -d %s > %s\n", f1, f2);
+	    exit(1);
+	    /* GCS FIX:  Need to make do_error into var_args fn? */
+    /*      printf ("Tried to gzip -c -d %s > %s\n", f1, f2); */
+      /*      do_error ("Can't gunzip requested file"); */
     }
 }
 
@@ -208,9 +211,9 @@ fopen_read_gzipped (char* fn)
 #else
     const char* cmd_str = "gzip -d -c < %s 2> /dev/null";
 #endif
-    char *cmd = (char*) malloc (strlen (cmd_str) + strlen (fn) + 1);
-    
-    sprintf (cmd, cmd_str, fn);
+//    char *cmd = (char*) malloc (strlen (cmd_str) + strlen (fn) + 1);
+    char *cmd; 
+    asprintf (&cmd, cmd_str, fn);
 #ifdef __EMX__
     fp=popen(cmd,"rb");
 #else
@@ -310,60 +313,55 @@ find_libdir (void)
 }
 
 #else /* Unix with configure */
+
 void
 find_libdir (void)
 {
     const char searchfile[] = "colour.pal";
     char *home_dir, *cwd;
     char cwd_buf[LC_PATH_MAX];
-    char filename_buf[LC_PATH_MAX];
-    #ifdef ENABLE_BINRELOC
-    char *datadir_buf;
-    #endif
+    char *filename_buf;
 
     /* Check 1: environment variable */
     home_dir = getenv ("LINCITY_HOME");
-    if (home_dir) {
-	snprintf (filename_buf, LC_PATH_MAX, "%s%c%s", 
-		  home_dir, PATH_SLASH, searchfile);
-	if (file_exists(filename_buf)) {
-	    strncpy (LIBDIR, home_dir, LC_PATH_MAX);
-	    return;
-	}
+    if (  home_dir)
+    {
+    	    asprintf (&filename_buf, "%s%c%s", home_dir, PATH_SLASH, searchfile);
+	    if (file_exists(filename_buf)) 
+		    strncpy (LIBDIR, home_dir, LC_PATH_MAX);
+	    free(filename_buf);
+	    return; 
     }
-
+    free(filename_buf);
     /* Check 2: current working directory */
     cwd = getcwd (cwd_buf, LC_PATH_MAX);
     if (cwd) {
-	snprintf (filename_buf, LC_PATH_MAX, "%s%c%s", 
-		  cwd_buf, PATH_SLASH, searchfile);
-	if (file_exists(filename_buf)) {
-	    strncpy (LIBDIR, cwd_buf, LC_PATH_MAX);
+	    asprintf (&filename_buf,  "%s%c%s",   cwd_buf, PATH_SLASH, searchfile);
+	    if (file_exists(filename_buf)) 
+		    strncpy (LIBDIR, cwd_buf, LC_PATH_MAX);
+	    free(filename_buf);
 	    return;
-	}
-    }
-
+       }
+ 	free(filename_buf);
+	    
     /* Check 3: default (configuration) directory */
-    #ifdef ENABLE_BINRELOC
-    datadir_buf=br_strcat(DATADIR,"/lincity");
-
-    snprintf (filename_buf, LC_PATH_MAX, "%s%c%s", 
-	      datadir_buf, PATH_SLASH, searchfile);
-
-    if (file_exists(filename_buf)) {
-	strncpy (LIBDIR, datadir_buf, LC_PATH_MAX);
-	return;
+#ifdef DATADIR
+	asprintf (&filename_buf,  "%s/lincity/%s", DATADIR, searchfile);
+     if (file_exists(filename_buf)) { 
+	     snprintf(LIBDIR,LC_PATH_MAX,"%s/lincity", DATADIR);
+            free(filename_buf);
+	    return;
     }
-    free(datadir_buf);
+      free(filename_buf);
+#endif
 
-    #else
-    snprintf (filename_buf, LC_PATH_MAX, "%s%c%s", 
-	      DEFAULT_LIBDIR, PATH_SLASH, searchfile);
+    asprintf (&filename_buf,  "%s%c%s",  DEFAULT_LIBDIR, PATH_SLASH, searchfile);
     if (file_exists(filename_buf)) {
 	strncpy (LIBDIR, DEFAULT_LIBDIR, LC_PATH_MAX);
+        free(filename_buf);
 	return;
     }
-    #endif
+
     /* Finally give up */
     HandleError (_("Error. Can't find LINCITY_HOME"), FATAL);
 }
@@ -606,7 +604,8 @@ make_savedir (void)
 #else
     mkdir (lc_save_dir, 0755);
     chown (lc_save_dir, getuid (), getgid ());
-    if ((dp = opendir (lc_save_dir)) == NULL)
+    dp = opendir (lc_save_dir);
+    if (dp == NULL)
     {
 	/* change this to a screen message. */
 	printf (_("Couldn't create the save directory %s\n"), lc_save_dir);
@@ -661,6 +660,7 @@ malloc_failure (void)
   exit (1);
 }
 #endif
+
 char*load_graphic(char *s)
 {
     int x,l;
@@ -670,11 +670,9 @@ char*load_graphic(char *s)
     asprintf( &fullname,"%s/%s",graphic_path,s);
     inf=fopen(fullname,"rb");
     if ( !inf)
-    {
-	    char *tmp;
-	    asprintf(&tmp,"UNABLE TO LOAD:%s",fullname);
-	// do_error will exit()
-	do_error(tmp);
+    {	   
+	    info_box((char *)__func__,"UNABLE TO LOAD:%s",fullname);
+	    exit(1);
     }
     /*
       FIXME: looks complicated
