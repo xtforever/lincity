@@ -44,21 +44,21 @@ static int color;
 static short db_up = 0;
 static int db_return_value;
 
-char * db_screen_buffer; /* hold the screen we overwrite */
-char db_screen_fresh;    /* does the buffer hold information? */
+static char * db_screen_buffer; /* hold the screen we overwrite */
+static char db_screen_fresh;    /* does the buffer hold information? */
 
 /* Mouse handling routines: main_handler() and text_handler()
    main_handler handles the main dialog window: the text area and border.  
    Clicks in the border are useless and ignored; text_handler takes the
    interesting ones
 */
-void 
+static void 
 main_handler(int x, int y, int button) 
 {
     
 }
 
-void
+static void
 text_handler(int x, int y, int button)
 {
     int i;
@@ -74,8 +74,7 @@ text_handler(int x, int y, int button)
    Iterate through possible hotkeys, returning if key matches.
 */
 
-void
-dialog_key_handler (int key) 
+static void dialog_key_handler (int key) 
 {
     int i;
 
