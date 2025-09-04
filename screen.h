@@ -24,6 +24,7 @@ extern int monthgraph_style;
 
 /* This is on in screen_full_refresh, used in *_refresh() */
 extern char screen_refreshing;
+void dump_screen (void);
 
 char* current_month (int current_time);
 void draw_cb_box (int row, int col, int checked);
