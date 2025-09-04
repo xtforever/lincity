@@ -46,6 +46,16 @@ static Mouse_Handle * mhandle_first;
 static Mouse_Handle * mhandle_last;
 static Mouse_Handle * mhandle_current;
 
+/* Private functions */
+
+static int cmp(int n1, int n2)
+{
+    if (n1 != n2)
+	return (n1 < n2) ? 1 : -1;
+    else
+	return 0;
+}
+
 /* ---------------------------------------------------------------------- *
  * cs_mouse_handler
  * --
@@ -789,7 +799,7 @@ check_bulldoze_area (int x, int y)
 	shanty_bul_flag = 1;
     }
     else if (g == GROUP_TIP) {
-	ok_dial_box ("nobull-tip.mes", BAD, 0L);
+	ok_dial_box ("nobull-tip.mes", BAD, NULL);
 	return;
     }
 
@@ -938,31 +948,31 @@ no_credit_build_msg (int selected_group)
 {
 #ifdef GROUP_POWER_SOURCE_NO_CREDIT
   if (selected_group == GROUP_POWER_SOURCE) {
-    ok_dial_box ("no-credit-solar-power.mes", BAD, 0L);
+    ok_dial_box ("no-credit-solar-power.mes", BAD, NULL);
     return;
   }
 #endif
 #ifdef GROUP_UNIVERSITY_NO_CREDIT
   if (selected_group == GROUP_UNIVERSITY) {
-    ok_dial_box ("no-credit-university.mes", BAD, 0L);
+    ok_dial_box ("no-credit-university.mes", BAD, NULL);
     return;
   }
 #endif
 #ifdef GROUP_PARKLAND_NO_CREDIT
   if (selected_group == GROUP_PARKLAND) {
-    ok_dial_box ("no-credit-parkland.mes", BAD, 0L);
+    ok_dial_box ("no-credit-parkland.mes", BAD, NULL);
     return;
   }
 #endif
 #ifdef GROUP_RECYCLE_NO_CREDIT
   if (selected_group == GROUP_RECYCLE) {
-    ok_dial_box ("no-credit-recycle.mes", BAD, 0L);
+    ok_dial_box ("no-credit-recycle.mes", BAD, NULL);
     return;
   }
 #endif
 #ifdef GROUP_ROCKET
   if (selected_group == GROUP_ROCKET) {
-    ok_dial_box ("no-credit-rocket.mes", BAD, 0L);
+    ok_dial_box ("no-credit-rocket.mes", BAD, NULL);
     return;
   }
 #endif
@@ -978,7 +988,7 @@ choose_residence (void)
 
     asprintf (&s, "%s%c%s", lc_save_dir, PATH_SLASH, "res.tmp");
     tempfile = fopen (s, "w");
-    if ( tempfile == 0)
+    if (  ! tempfile )
 	do_error ("Can't write res.tmp");
     free (s);
 
@@ -1229,18 +1239,18 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
 	       to build the road.  So clean up and exit. */
 	    mt_flag = 0;
 	    draw_main_window_box (green (8));
-	    status_message(0,0);
+	    status_message(NULL,NULL);
 	}
 	else if ((draw_ret = do_mt_draw(ox, cx, oy, cy, mt_perm))) {
 
 	    print_total_money ();
 	    mt_flag = 0;
 	    draw_main_window_box (green (8));
-	    status_message(0,0);
+	    status_message(NULL,NULL);
 	} else {
 	    /* This shouldn't happen.  Clean up and continue anyway.  */
 	    mt_flag = 0;
-	    status_message(0,0);
+	    status_message(NULL,NULL);
 	    draw_main_window_box (green (8));
 	}
 	dx = 0; dy = 0;
@@ -1251,7 +1261,7 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
 	mt_flag = 0;
 	draw_main_window_box (green (8));
 	draw_ret = do_mt_draw(ox, dx, oy, dy, mt_erase);
-	status_message(0,0);
+	status_message(NULL,NULL);
 
 	dx = 0; dy = 0;
 	ox = 0; oy = 0;
@@ -1275,7 +1285,7 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
 		     mt_length * get_type_cost(selected_module_type));
 	}
 
-	status_message(0,s);
+	status_message(NULL,s);
 	dx = cx; dy = cy;
 	break;
 
@@ -1311,14 +1321,6 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
     return (1);
 }
 
-int
-cmp(int n1, int n2)
-{
-    if (n1 != n2)
-	return (n1 < n2) ? 1 : -1;
-    else
-	return 0;
-}
 
 void
 init_mouse_registry()
