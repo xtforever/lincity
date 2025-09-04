@@ -35,8 +35,14 @@ static int mt_length;
 static int mt_grp;
 static char mt_name[20];
 static short mouse_buffer_fresh = 0;
+static int do_mt_draw (int x1, int x2, int y1, int y2, int (*mode)(int,int));
 
-void check_bulldoze_area (int x, int y);
+static void check_bulldoze_area (int x, int y);
+static void do_market_cb_template (int x, int y, int is_market_cb);
+/* mode callback */
+static int mt_erase(int x, int y);
+static int mt_temp(int x, int y);
+static int mt_perm(int x, int y);
 
 /* Mouse registry */
 
@@ -853,8 +859,7 @@ drag_screen (void)
     adjust_main_origin (origin_x, origin_y, 1);
 }
 
-void
-do_market_cb_template (int x, int y, int is_market_cb)
+static void do_market_cb_template (int x, int y, int is_market_cb)
 {
     Rect* mcb = &scr.market_cb;
     int is_sell;
@@ -1161,8 +1166,8 @@ int mt_perm(int x, int y)
     return 0;
 }
 
-int
-do_mt_draw (int x1, int x2, int y1, int y2, int (*mode)())
+static int
+do_mt_draw (int x1, int x2, int y1, int y2, int (*mode)( int, int))
 {
     int dir = 1;
     int horiz = 1;
@@ -1323,13 +1328,14 @@ mt_draw (int cxp, int cyp, int flag) /* c[xy]p are pixel coordinates */
 
 
 void
-init_mouse_registry()
+init_mouse_registry(void)
 {
     mhandle_first = NULL;
     mhandle_last = NULL;
     mhandle_current = NULL;
     mhandle_count = 0;
 }
+
 
 /* Add and return an entry in the registry.  Add it at the beginning, so
    it supercedes earlier entries in mouse_handle_click() */
