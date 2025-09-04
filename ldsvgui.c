@@ -101,12 +101,12 @@ char LIBDIR[256];
 #endif
 
 
-char save_names[10][42];
+static char save_names[10][42];
 
 /* ---------------------------------------------------------------------- *
  * Public Functions
  * ---------------------------------------------------------------------- */
-void
+static void
 draw_prefs_cb (void)
 {
     Rect* mw = &scr.main_win;
@@ -135,7 +135,7 @@ draw_prefs_cb (void)
 #endif
 }
 
-void
+static void
 do_prefs_buttons (int x, int y)
 {
     int outx, outy, outh, outw;
@@ -277,8 +277,7 @@ do_network_screen (void)
 }
 #endif
 
-void
-do_save_city ()
+void do_save_city (void)
 {
     Rect* mw = &scr.main_win;
     char s[200], c;
@@ -548,7 +547,7 @@ draw_save_dir (int bg_colour)
     free (s);
 }
 
-void
+static void
 edit_string (char* s, unsigned int maxlen, int xpos, int ypos)
 {
     char c;
@@ -638,8 +637,8 @@ input_network_port (char *s)
     edit_string (s, 40, mw->x + 124, mw->y + 280);
 }
 
-
-void
+#if 0
+static void
 do_get_nw_server (void)
 {
     Rect* mw = &scr.main_win;
@@ -711,3 +710,4 @@ do_get_nw_server (void)
     suppress_ok_buttons = 0;
     redraw_mouse ();
 }
+#endif
