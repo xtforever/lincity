@@ -29,8 +29,8 @@ void
 set_mappoint (int x, int y, short selected_type)
 {
   int grp;
-
-  if ((grp = get_group_of_type(selected_type)) < 0) return;
+  grp = get_group_of_type(selected_type);
+  if (grp < 0) return;
 
   MP_TYPE(x,y) = selected_type;
   MP_GROUP(x,y) = grp;
