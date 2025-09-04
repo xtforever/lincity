@@ -17,7 +17,9 @@
 /* ---------------------------------------------------------------------- *
  * Public Global Variables
  * ---------------------------------------------------------------------- */
-
+/*
+  FIXME: put that in structures
+ */
 /* Daily accumulators */
 int food_in_markets;
 int jobs_in_markets;
@@ -140,7 +142,7 @@ init_yearly(void)
     cricket_cost = 0;
 }
 
-void
+static void
 init_lastyear(void)
 {
     ly_income_tax = 0;
