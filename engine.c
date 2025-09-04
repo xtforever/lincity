@@ -36,8 +36,6 @@ int adjust_money(int value)
     return total_money;
 }
 
-
-
 int no_credit_build (int selected_group)
 {
   if (total_money >= 0)
@@ -298,14 +296,16 @@ shuffle_mappoint_array (void)
   int i, x, a;
   for (i = 0; i < SHUFFLE_MAPPOINT_COUNT; i++)
     {
-      x = rand () % WORLD_SIDE_LEN;
-      a = mappoint_array_x[i];
-      mappoint_array_x[i] = mappoint_array_x[x];
-      mappoint_array_x[x] = a;
-      x = rand () % WORLD_SIDE_LEN;
-      a = mappoint_array_y[i];
-      mappoint_array_y[i] = mappoint_array_y[x];
-      mappoint_array_y[x] = a;
+	    /* swap X */
+	    x = rand () % WORLD_SIDE_LEN;
+	    a = mappoint_array_x[i];
+	    mappoint_array_x[i] = mappoint_array_x[x];
+	    mappoint_array_x[x] = a;
+       /* swap Y */
+	    x = rand () % WORLD_SIDE_LEN;
+	    a = mappoint_array_y[i];
+	    mappoint_array_y[i] = mappoint_array_y[x];
+	    mappoint_array_y[x] = a;
     }
 }
 
@@ -598,7 +598,7 @@ remove_people (int num)
       if (t > HOF_START && t < HOF_STOP)
 	ok_dial_box ("launch-gone-mail.mes", GOOD, 0L);
       else
-	ok_dial_box ("launch-gone.mes", GOOD, 0L);
+	ok_dial_box ("launch-gone.mes", GOOD, NULL);
       housed_population = 0;
     }
 #endif
@@ -606,7 +606,7 @@ remove_people (int num)
   /* Note that the previous test was inaccurate.  There could be
      exactly 1000 people left. */
   if (!housed_population && !people_pool) {
-    ok_dial_box ("launch-gone.mes", GOOD, 0L);
+    ok_dial_box ("launch-gone.mes", GOOD, NULL);
   }
 }
 
