@@ -11,6 +11,7 @@
 #include "lcstring.h"
 #include "cliglobs.h"
 #include "lcintl.h"
+#include "lclib.h"
 
 char* 
 current_month (int current_time)
@@ -48,41 +49,40 @@ format_number5 (char* str, int num)
     }
 }
 
-void 
-num_to_ansi(char * s, size_t size, long num) 
+void num_to_ansi(char * s, size_t size, long num) 
 {
-  int triplets = 0;
-  float numf = (float)num;  
+	int triplets = 0;
+	float numf = (float)num;  
 
-  while (numf > 1000 || numf < -1000) {
-    numf /= 1000;
-    triplets++;
-  }
+	while (numf > 1000 || numf < -1000) {
+		numf /= 1000;
+		triplets++;
+	}
 
-  switch(triplets) 
-    {
-    case 0: triplets = ' '; break;
-    case 1: triplets = 'k'; break; // kila
-    case 2: triplets = 'm'; break; // mega
-    case 3: triplets = 'g'; break; // giga 
-    case 4: triplets = 't'; break; // tera 
-    case 5: triplets = 'p'; break; // peta
-    default: triplets = '?'; break;
-    }
+	switch(triplets) 
+	{
+	case 0: triplets = ' '; break;
+	case 1: triplets = 'k'; break; // kilo
+	case 2: triplets = 'm'; break; // mega
+	case 3: triplets = 'g'; break; // giga 
+	case 4: triplets = 't'; break; // tera 
+	case 5: triplets = 'p'; break; // peta
+	default: triplets = '?'; break;
+	}
       
-  if (size == 4) { /* to make up for format_pos_number4.  Eeewwwwwww. */ 
-      if (numf < 10) { 
-	  snprintf(s, size + 1, "%1.1f%c", numf, triplets);
-      } else {
-	  snprintf(s,size + 1, "%3.0f%c", numf, triplets);
-      }
-  } else {
-      if (triplets == ' ') {
-	  snprintf(s, size, "%3.1f", numf);
-      } else {
-	  snprintf(s, size, "%3.1f%c", numf, triplets);
-      }
-  }
+	if (size == 4) { /* to make up for format_pos_number4.  Eeewwwwwww. */ 
+		if (numf < 10) { 
+			snprintf(s, size + 1, "%1.1f%c", numf, triplets);
+		} else {
+			snprintf(s,size + 1, "%3.0f%c", numf, triplets);
+		}
+	} else {
+		if (triplets == ' ') {
+			snprintf(s, size, "%3.1f", numf);
+		} else {
+			snprintf(s, size, "%3.1f%c", numf, triplets);
+		}
+	}
 }
 
 void 
