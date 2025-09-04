@@ -43,7 +43,7 @@ int pixmap_width = 0;
  * ---------------------------------------------------------------------- */
 #ifdef USE_PIXMAPS
 void
-init_pixmaps ()
+init_pixmaps (void)
 {
     int i;
     for (i = 1; i < NUM_OF_TYPES; i++) {
@@ -362,7 +362,7 @@ void
 free_pixmap (void)
 {
     free (pixmap);
-    pixmap = 0;
+    pixmap = NULL;
 }
 
 void
