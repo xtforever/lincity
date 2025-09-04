@@ -63,7 +63,7 @@ mps_handler(int x, int y, int button)
 /* mps_init(): Initialize mps vars and mouse handles */
 
 void
-mps_init() 
+mps_init(void) 
 {
     mps_style = MPS_GLOBAL;
     mps_global_style = MPS_GLOBAL_FINANCE;
