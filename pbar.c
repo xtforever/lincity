@@ -164,7 +164,7 @@ refresh_pbars (void)
 
     /* Jobs */
     b = &scr.pbar_jobs;
-    draw_pbar_new (b, pbar_adjust_jobs(pbars[PFOOD].diff));
+    draw_pbar_new (b, pbar_adjust_jobs(pbars[PJOBS].diff));
     write_pbar_int (b, PJOBS);
 
     /* Coal */
