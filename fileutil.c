@@ -117,7 +117,11 @@ static char LIBDIR[LC_PATH_MAX];
 char *lc_save_dir;
 int lc_save_dir_len;
 static char *lc_temp_filename;
-
+/*
+  FIXME:
+  1. why here ? used in ldsvguts.c
+  2. can we bundle that is a struct prefs ?
+ */
 char given_scene[LC_PATH_MAX];
 char colour_pal_file[LC_PATH_MAX];
 char opening_pic[LC_PATH_MAX];
@@ -320,7 +324,7 @@ find_libdir (void)
     const char searchfile[] = "colour.pal";
     char *home_dir, *cwd;
     char cwd_buf[LC_PATH_MAX];
-    char *filename_buf;
+    char *filename_buf=NULL;
 
     /* Check 1: environment variable */
     home_dir = getenv ("LINCITY_HOME");
@@ -341,8 +345,9 @@ find_libdir (void)
 		    strncpy (LIBDIR, cwd_buf, LC_PATH_MAX);
 	    free(filename_buf);
 	    return;
+             free(filename_buf);
        }
- 	free(filename_buf);
+
 	    
     /* Check 3: default (configuration) directory */
 #ifdef DATADIR
@@ -352,10 +357,10 @@ find_libdir (void)
             free(filename_buf);
 	    return;
     }
-      free(filename_buf);
+         free(filename_buf);
 #endif
 
-    asprintf (&filename_buf,  "%s%c%s",  DEFAULT_LIBDIR, PATH_SLASH, searchfile);
+     asprintf (&filename_buf,  "%s%c%s",  DEFAULT_LIBDIR, PATH_SLASH, searchfile);
     if (file_exists(filename_buf)) {
 	strncpy (LIBDIR, DEFAULT_LIBDIR, LC_PATH_MAX);
         free(filename_buf);
