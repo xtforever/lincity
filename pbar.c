@@ -1,4 +1,4 @@
-/* pbar.c: handles rate-of-change indicators 
+/* pbar.c: handles rate-of-change indicators
  * This file is part of lincity.
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * Portions copyright (c) 2001 Corey Keasling.
@@ -61,7 +61,7 @@ init_pbar_text (void)
  * Pbar drawing function
  * ---------------------------------------------------------------------- */
 
-void 
+void
 draw_pbar (Rect* b, char* graphic)
 /* XXX: WCK: why not just make the graphic include the black? */
 /* GCS: Good idea, but xpicedit is painful to use! */
@@ -92,7 +92,7 @@ clear_pbar_text (Rect* pbar)
     Fgl_fillbox (pbar->x + pbar->w + 1, pbar->y, PBAR_TEXT_W, pbar->h, 0);
 }
 
-void 
+void
 write_pbar_int (Rect* b, int val)
 {
     char s[16];
@@ -105,7 +105,7 @@ write_pbar_int (Rect* b, int val)
 void
 write_pbar_text (Rect* b, char * s)
 {
-    Fgl_setfontcolors (0, 255); 
+    Fgl_setfontcolors (0, 255);
     Fgl_write (b->x + b->w + 25, b->y + 4, s);
     Fgl_setfontcolors (TEXT_BG_COLOUR, TEXT_FG_COLOUR);
 }
@@ -118,7 +118,7 @@ write_pbar_text (Rect* b, char * s)
 #define pbar_adjust_goods(diff) diff > 0 ? diff / 2 + 1 : diff
 #define pbar_adjust_ore(diff) diff > 0 ? diff / 2 + 1 : diff
 #define pbar_adjust_steel(diff) diff > 0 ? diff / 2 + 1 : diff
-#define pbar_adjust_money(diff) diff  > 0 ? diff / 800 + 1 : diff / 400 
+#define pbar_adjust_money(diff) diff  > 0 ? diff / 800 + 1 : diff / 400
 
 
 /* XXX: wck: write_pbar_* changes font colours every time its called; only
@@ -127,7 +127,7 @@ write_pbar_text (Rect* b, char * s)
 void
 refresh_population_text (void)
 {
-  /* GCS: This function is kind of a hack, but I need the population 
+  /* GCS: This function is kind of a hack, but I need the population
      to be refreshed immediately after the rocket is launched.
      Therefore, this function! */
     Rect * b;
@@ -136,11 +136,12 @@ refresh_population_text (void)
     write_pbar_int (b, PPOP);
 }
 
-void 
+void
 refresh_pbars (void)
 {
     Rect * b;
     char s[10];
+    double tmp;
 
     /* Population */
     b = &scr.pbar_pop;
@@ -151,10 +152,11 @@ refresh_pbars (void)
     b = &scr.pbar_tech;
     draw_pbar_new (b, pbar_adjust_tech(pbars[PTECH].diff));
 
-    snprintf (s, 10, "%5.1f", 
-	      (float) pbars[PTECH].data[pbars[PTECH].data_size - 1] * 
-	      100.0 / MAX_TECH_LEVEL);
-
+    tmp=pbars[PTECH].data[pbars[PTECH].data_size - 1] * 100.0 / MAX_TECH_LEVEL;
+    snprintf (s, sizeof(s), "%5.1f", tmp );
+/*
+   write_pbar_int () uses format_number5;
+ */
     write_pbar_text (b, s);
 
     /* Food */
@@ -194,7 +196,7 @@ refresh_pbars (void)
 }
 
 
-/* 
+/*
    update_pbar: add a new value to the array used to calculate the
    pbar display.  If month_flag is 1, the oldtotal is updated, all
    values are shifted up (dropping the first one), and the new value
@@ -225,7 +227,7 @@ update_pbar (int pbar_num, int value, int month_flag)
     pbar->tot = 0;
 
     for (i = 0; i < (pbar->data_size - 1); i++) {
-	if (month_flag) 
+	if (month_flag)
 	    pbar->tot += (pbar->data[i] = pbar->data[i+1]);
 	else
 	    pbar->tot += pbar->data[i];
@@ -264,13 +266,13 @@ update_pbars_monthly(void)
     update_pbar (PMONEY, total_money, 1);
 }
 
-int 
+int
 compute_pbar_offset (Rect* b, int val)
 {
     int offset;
     int val_abs = val > 0 ? val : -val;
 
-    if (!val) 
+    if (!val)
 	return 0;
 
     offset = (int) log (val_abs);
@@ -302,21 +304,21 @@ draw_pbar_new (Rect* b, int val)
 /* Right/Positive */
       spike_start = b->x + (b->w / 2) + 8;
       spike_end = spike_start + offset;
-      Fgl_fillbox (spike_start, b->y+2, spike_end - spike_start, b->h-4, 
+      Fgl_fillbox (spike_start, b->y+2, spike_end - spike_start, b->h-4,
 		   (green(12)));
     } else if (offset < 0) {
 /* Left/Negative */
       spike_end = b->x + (b->w / 2) - 8;
       spike_start = spike_end + offset;
-      Fgl_fillbox (spike_start, b->y+2, spike_end - spike_start, b->h-4, 
-		   (red(12))); 
-    } 
+      Fgl_fillbox (spike_start, b->y+2, spike_end - spike_start, b->h-4,
+		   (red(12)));
+    }
 }
 
 
 
 void
-pbar_mouse(int rawx, int rawy, int button) 
+pbar_mouse(int rawx, int rawy, int button)
 {
   if (button != LC_MOUSE_RIGHTBUTTON)
     return;
