@@ -24,16 +24,18 @@ static char *module_graphic[NUMOF_MODULES];
 static int module_tflag[NUMOF_MODULES];
 static char module_help[NUMOF_MODULES][20];
 
-int module_help_flag[NUMOF_MODULES];
+int module_help_flag[NUMOF_MODULES]; //ldsvguts.c
 
-int sbut[NUMOF_MODULES];
+int sbut[NUMOF_MODULES];   //ldsvguts.c
 
 int selected_module = 0;
 int selected_module_type;
 int selected_module_group;
 int selected_module_cost;
 
+/* FIXME: generate a structure where all this stuff is together
 
+ */
 void
 init_modules (void)
 {
