@@ -6,3 +6,6 @@ just use config.sh to compile and
 make a jump in time backwards.
 
 The game is licened GPL V2.
+
+note: to compile you need the include-files for libpng also the
+            autoconf stuff
