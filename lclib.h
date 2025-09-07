@@ -20,10 +20,11 @@ void num_to_ansi(char * s, size_t size, long num);
 int min_int (int i1, int i2);
 int max_int (int i1, int i2);
 
-void * lcalloc (size_t size);
+//void * lcalloc (size_t size);
 void *xmalloc (size_t size);
 void *xcalloc (size_t nmemb, size_t size) ;
 void *xstrdup(const char *s);
+int in_range( int x, int y,int x1, int y1, int range);
 
 #endif
 

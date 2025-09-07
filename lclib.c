@@ -235,3 +235,12 @@ void *xstrdup(const char *str)
 	return tmp;
 }
 
+/*
+  check if point (x1,x1) is in range of (x,y) 
+ */
+int in_range( int x, int y,int x1, int y1, int range)
+{
+	if  ( abs (x1 - x) < range && abs (y1 - y) < range)
+		return 1;      	
+	return 0;
+}
