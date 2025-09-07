@@ -36,14 +36,14 @@
 #if defined (WIN32)
 int usleep_counter = 0;
 #else
-struct timeval lc_timeval;
-int real_start_time;
+static struct timeval lc_timeval;
+static int real_start_time;
 #endif
 
-Mouse_Handle * pause_handle;
-Mouse_Handle * slow_handle;
-Mouse_Handle * medium_handle;
-Mouse_Handle * fast_handle;
+static Mouse_Handle * pause_handle;
+static Mouse_Handle * slow_handle;
+static Mouse_Handle * medium_handle;
+static Mouse_Handle * fast_handle;
 
 /* ---------------------------------------------------------------------- *
  * Public Global Variables
@@ -55,10 +55,10 @@ long real_time = 0;    /* In milliseconds */
  * Private Function Declarations
  * ---------------------------------------------------------------------- */
 
-void pause_handler(int x, int y, int button);
-void slow_handler(int x, int y, int button);
-void medium_handler(int x, int y, int button);
-void fast_handler(int x, int y, int button);
+static void pause_handler(int x, int y, int button);
+static void slow_handler(int x, int y, int button);
+static void medium_handler(int x, int y, int button);
+static void fast_handler(int x, int y, int button);
 
 /* ---------------------------------------------------------------------- *
  * Function Definitions
@@ -104,59 +104,8 @@ get_real_time (void)
 #endif
 }
 
-/* Game speed functions */
-
-void
-init_timer_buttons (void)
-{
-    pause_handle = mouse_register(&scr.pause_button, &pause_handler);
-    slow_handle = mouse_register(&scr.slow_button, &slow_handler);
-    medium_handle = mouse_register(&scr.med_button, &medium_handler);
-    fast_handle = mouse_register(&scr.fast_button, &fast_handler);
-}
 
 /* Mouse handlers */
-
-void
-pause_handler(int x, int y, int button)
-{
-    if (button == LC_MOUSE_RIGHTBUTTON) {
-	activate_help ("pause.hlp");
-    } else {
-	select_pause ();
-    }
-}
-
-void
-slow_handler(int x, int y, int button)
-{
-    if (button == LC_MOUSE_RIGHTBUTTON) {
-	activate_help ("slow.hlp");
-    } else {
-	select_slow ();
-    }
-}
-
-void
-medium_handler(int x, int y, int button)
-{
-    if (button == LC_MOUSE_RIGHTBUTTON) {
-	activate_help ("medium.hlp");
-    } else {
-	select_medium ();
-    }
-}
-
-void
-fast_handler(int x, int y, int button)
-{
-    if (button == LC_MOUSE_RIGHTBUTTON) {
-	activate_help ("fast.hlp");
-    } else {
-	select_fast ();
-    }
-}
-
 void
 select_fast (void)
 {
@@ -225,4 +174,56 @@ select_pause (void)
 	draw_fast (0);
 	redraw_mouse ();
     }
+}
+
+static void
+pause_handler(int x, int y, int button)
+{
+    if (button == LC_MOUSE_RIGHTBUTTON) {
+	activate_help ("pause.hlp");
+    } else {
+	select_pause ();
+    }
+}
+
+static void
+slow_handler(int x, int y, int button)
+{
+    if (button == LC_MOUSE_RIGHTBUTTON) {
+	activate_help ("slow.hlp");
+    } else {
+	select_slow ();
+    }
+}
+
+static void
+medium_handler(int x, int y, int button)
+{
+    if (button == LC_MOUSE_RIGHTBUTTON) {
+	activate_help ("medium.hlp");
+    } else {
+	select_medium ();
+    }
+}
+
+static void
+fast_handler(int x, int y, int button)
+{
+    if (button == LC_MOUSE_RIGHTBUTTON) {
+	activate_help ("fast.hlp");
+    } else {
+	select_fast ();
+    }
+}
+
+
+/* Game speed functions */
+
+void
+init_timer_buttons (void)
+{
+    pause_handle = mouse_register(&scr.pause_button, &pause_handler);
+    slow_handle = mouse_register(&scr.slow_button, &slow_handler);
+    medium_handle = mouse_register(&scr.med_button, &medium_handler);
+    fast_handle = mouse_register(&scr.fast_button, &fast_handler);
 }
