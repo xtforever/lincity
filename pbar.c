@@ -17,6 +17,9 @@
 
 struct pbar_st pbars[NUM_PBARS];
 
+static void clear_pbar_text (Rect* pbar);
+static void draw_pbar_new (Rect* b, int val);
+
 /*
   FIXME: use memset() ?
  */
@@ -61,7 +64,7 @@ init_pbar_text (void)
  * Pbar drawing function
  * ---------------------------------------------------------------------- */
 
-void
+static void
 draw_pbar (Rect* b, char* graphic)
 /* XXX: WCK: why not just make the graphic include the black? */
 /* GCS: Good idea, but xpicedit is painful to use! */
@@ -86,28 +89,26 @@ draw_pbars (void)
 
 /* Text functions */
 
-void
+static void
 clear_pbar_text (Rect* pbar)
 {
     Fgl_fillbox (pbar->x + pbar->w + 1, pbar->y, PBAR_TEXT_W, pbar->h, 0);
 }
 
-void
-write_pbar_int (Rect* b, int val)
-{
-    char s[16];
-    format_number5 (s, pbars[val].data[pbars[val].data_size-1]);
-    Fgl_setfontcolors (0, 255);
-    Fgl_write (b->x + b->w + 25, b->y + 4, s);
-    Fgl_setfontcolors (TEXT_BG_COLOUR, TEXT_FG_COLOUR);
-}
-
-void
+static void
 write_pbar_text (Rect* b, char * s)
 {
     Fgl_setfontcolors (0, 255);
     Fgl_write (b->x + b->w + 25, b->y + 4, s);
     Fgl_setfontcolors (TEXT_BG_COLOUR, TEXT_FG_COLOUR);
+}
+
+static void
+write_pbar_int (Rect* b, int val)
+{
+    char s[16];
+    format_number5 (s, pbars[val].data[pbars[val].data_size-1]);
+    write_pbar_text (b,  s);
 }
 
 #define pbar_adjust_pop(diff) 2 * diff
@@ -266,7 +267,7 @@ update_pbars_monthly(void)
     update_pbar (PMONEY, total_money, 1);
 }
 
-int
+static int
 compute_pbar_offset (Rect* b, int val)
 {
     int offset;
@@ -284,8 +285,7 @@ compute_pbar_offset (Rect* b, int val)
     return offset;
 }
 
-void
-draw_pbar_new (Rect* b, int val)
+static void draw_pbar_new (Rect* b, int val)
 {
 
     int offset;
