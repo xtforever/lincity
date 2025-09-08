@@ -29,13 +29,13 @@ static int grid_inc = 0;
 
 Grid * grid[MAX_GRIDS];
 
-/* power_time_step 
-   Take the avail_power from last timestep, and move in into the 
-   total_power, which will be used during this timestep on a first-come 
+/* power_time_step
+   Take the avail_power from last timestep, and move in into the
+   total_power, which will be used during this timestep on a first-come
    first-served basis.
 */
 void
-power_time_step (void) 
+power_time_step (void)
 {
     int gi;
     int net; /* net power */
@@ -44,7 +44,7 @@ power_time_step (void)
 	return;
 
     for (gi = 1; gi <= grid_num; gi++) {
-	grid[gi]->total_power = grid[gi]->avail_power - 
+	grid[gi]->total_power = grid[gi]->avail_power -
 		(grid[gi]->power_lines * POWER_LINE_LOSS);
 
 	net = (grid[gi]->total_power - grid[gi]->demand);
@@ -52,7 +52,7 @@ power_time_step (void)
 	    grid[gi]->powered = -1;
 	else if (net < (grid[gi]->avail_power / 4))
 	    grid[gi]->powered = 0;
-	else 
+	else
 	    grid[gi]->powered = 1;
 
 	grid[gi]->avail_power = 0;
@@ -60,12 +60,12 @@ power_time_step (void)
     }
 
     /* Clear substation 'Here' counter */
-    for (gi = 0; gi < numof_substations; gi++) 
+    for (gi = 0; gi < numof_substations; gi++)
 	MP_INFO(substationx[gi],substationy[gi]).int_5 = 0;
 }
 
 
-void 
+void
 map_power_grid (void)
 {
     int mapx, mapy;
@@ -99,8 +99,9 @@ map_power_grid (void)
 }
 
 
+/*
+FIXME: too simple,  connect two sources to get the error
 
-/* 
 check_grid(x, y, xi, yi) - coordinates, ?i being which one to increment if we
 need to step over transport
 
@@ -110,28 +111,28 @@ power source, project the power for it and add that to our
 total.  Now set it to our grid.  If it is a power line, return
 1, otherwise 0. */
 
-int 
-check_grid(int x, int y, int xi, int yi) 
+int
+check_grid(int x, int y, int xi, int yi)
 {
   if (XY_IS_GRID(x,y) && !IS_OLD_WINDMILL(x,y)) {
     if (GRID_CURRENT(x,y)) {
       if (MP_INFO(x,y).int_6 != grid_num)
 	/* XXX: This can occur if connecting to a power source at different
 	   locations.  Need a clean way to resolve this, either connect
-	   the two grids by treating a power source as a power line, or 
+	   the two grids by treating a power source as a power line, or
 	   let the power source be multihomed and figure out power distribution
 	*/
 	printf("recurse_power_grid insane: %d, %d on a different grid!\n",
 	       x,y);
     } else if (!IS_POWER_LINE(x,y)) {
       if (IS_POWER_SOURCE(x,y)) {
-	project_power(x,y); 
+	project_power(x,y);
 	grid[grid_num]->total_power += MP_INFO(x,y).int_1;
       }
-      
+
       MP_INFO(x,y).int_6 = grid_num;
       MP_INFO(x,y).int_7 = grid_inc;
-      
+
     } else /* is a power line */
       return 1;
   } else if (XY_IS_TRANSPORT(x,y) || XY_IS_WATER(x,y)) { /* can we step over?*/
@@ -146,27 +147,27 @@ check_grid(int x, int y, int xi, int yi)
 
   return 0;
 }
-  
+
 /* Go through the power grid and figure out what is connected.  This
 should really handle the connect_transport bit for power lines.  That
 would help perspicuity anyway. */
 
-void 
-recurse_power_grid (int startx, int starty, int steps) 
+void
+recurse_power_grid (int startx, int starty, int steps)
 {
     static int level;             /* debug: levels of recursion encountered */
     int count = steps;            /* number of steps taken - for animation */
     short dir = -1;   /* -1 undetermined, 0 nothing left, Direction #defines */
     int mapx = startx, mapy = starty;                     /* to move about */
     int inc;           /* handles special case of stepping over transport */
-  
+
     level++;
-  
+
     if (count % POWER_MODULUS == 0)
 	count = 0;
 
     /* Old windmills aren't grid connected, so they are on their own 'grid'.  We
-       ignore them in the main loop.  This case should only be reached from a 
+       ignore them in the main loop.  This case should only be reached from a
        call from map_power_grid with a new grid_num, not from a new path in the
        code below */
 
@@ -227,7 +228,7 @@ recurse_power_grid (int startx, int starty, int steps)
 	    }
 	}
 
-	/* East */    
+	/* East */
 	if (mapx < WORLD_SIDE_LEN) {
 	    if ((inc = check_grid(mapx + 1, mapy, 1, 0))) {
 		if (dir < 1) {
@@ -238,7 +239,7 @@ recurse_power_grid (int startx, int starty, int steps)
 	    }
 	}
 
-	/* South */    
+	/* South */
 	if (mapy < WORLD_SIDE_LEN) {
 	    if ((inc = check_grid(mapx, mapy + 1, 0, 1))) {
 		if (dir < 1) {
@@ -251,11 +252,11 @@ recurse_power_grid (int startx, int starty, int steps)
 
 	/* Move to a new square if the chosen direction is not already mapped. */
 	switch (dir) {
-	case (-1):  /* Didn't find one, must not be any.  Stop looping */ 
+	case (-1):  /* Didn't find one, must not be any.  Stop looping */
 	    {
-		dir = 0; 
+		dir = 0;
 	    } break;
-	case WEST: 
+	case WEST:
 	    {
 		if (mapx >= 1) {
 		    if ((inc = check_grid(mapx - 1, mapy, -1, 0))) {
@@ -292,7 +293,7 @@ recurse_power_grid (int startx, int starty, int steps)
 	    } break;
 
 	case SOUTH:
-	    { 
+	    {
 		if (mapy < WORLD_SIDE_LEN) {
 		    if ((inc = check_grid(mapx, mapy + 1, 0, 1))) {
 			mapy += inc;
@@ -312,28 +313,28 @@ recurse_power_grid (int startx, int starty, int steps)
 /* project_power
    Get the appropriate number from the proper variable */
 
-void 
-project_power(int mapx, int mapy) 
+void
+project_power(int mapx, int mapy)
 {
-  switch (MP_GROUP(mapx,mapy)) {
-  case GROUP_COAL_POWER: 
-    {
-      grid[grid_num]->max_power += MP_INFO(mapx,mapy).int_1;
-    } break;
-  case GROUP_SOLAR_POWER: 
-    {
-      grid[grid_num]->max_power += MP_INFO(mapx,mapy).int_3;
-    } break;
-  case GROUP_WINDMILL: 
-    { 
-      grid[grid_num]->max_power += MP_INFO(mapx,mapy).int_1;
-    } break;
-  default: 
-    {
-      printf("default case in project_power");
-      printf("\tMP_GROUP = %d\n",MP_GROUP(mapx,mapy));
-    } break;
-  }
+	switch (MP_GROUP(mapx,mapy)) {
+	case GROUP_COAL_POWER:
+	{
+		grid[grid_num]->max_power += MP_INFO(mapx,mapy).int_1;
+	} break;
+	case GROUP_SOLAR_POWER:
+	{
+		grid[grid_num]->max_power += MP_INFO(mapx,mapy).int_3;
+	} break;
+	case GROUP_WINDMILL:
+	{
+		grid[grid_num]->max_power += MP_INFO(mapx,mapy).int_1;
+	} break;
+	default:
+	{
+		printf("default case in project_power");
+		printf("\tMP_GROUP = %d\n",MP_GROUP(mapx,mapy));
+	} break;
+	}
 }
 
 
@@ -342,9 +343,9 @@ project_power(int mapx, int mapy)
    We go through a list (ugly, I know) until we find a substation in range
    and then try and get power from it's grid.  If we can't, continue.
 */
-
-int 
-get_power (int x, int y, int power, int block_industry)
+#if 0
+int
+_get_power (int x, int y, int power, int block_industry)
 {
 
   int i;
@@ -354,11 +355,11 @@ get_power (int x, int y, int power, int block_industry)
   if (numof_substations == 0)
     return(0);
 
-  for (i = 0; i < numof_substations; i++) 
+  for (i = 0; i < numof_substations; i++)
     {
       xi = substationx[i];
       yi = substationy[i];
-      if (abs (xi - x) < SUBSTATION_RANGE && 
+      if (abs (xi - x) < SUBSTATION_RANGE &&
 	  abs (yi - y) < SUBSTATION_RANGE) {
 
 	if (block_industry != 0 && MP_GROUP(xi, yi) == GROUP_WINDMILL)
@@ -372,8 +373,59 @@ get_power (int x, int y, int power, int block_industry)
 	  MP_INFO(xi,yi).int_5 += power;
 	  return 1;
 	}
-	
+
       }
     }
   return 0;
+}
+#endif
+/*
+	TODO:give the user a chance to figure out what went wrong  
+*/
+//int type;
+
+int
+get_power (int x, int y, int power, int block_industry)
+{
+
+	int i;
+	int xi, yi;
+	int grid_tmp; /* for simplicity */
+#ifdef DEBUG
+	int 	type=MP_GROUP(x,y);
+#endif	
+	if (numof_substations == 0)
+		return(0);
+
+
+
+	for (i = 0; i < numof_substations; i++)
+	{
+		xi = substationx[i];
+		yi = substationy[i];
+
+		/*
+		  industrie can not get power from WINDMILL
+		*/
+		if (block_industry != 0 && MP_GROUP(xi, yi) == GROUP_WINDMILL)
+			continue;
+		/*
+		  station out of range
+		*/
+		if (  ! in_range(x,y,xi,yi,SUBSTATION_RANGE)   )  continue;
+
+		grid_tmp = MP_INFO(xi,yi).int_6;
+
+		/*
+		  enought power left ?
+		*/
+		if ( power > grid[grid_tmp]->total_power  )
+			continue;
+
+		grid[grid_tmp]->demand += power;
+		grid[grid_tmp]->total_power -= power;
+		MP_INFO(xi,yi).int_5 += power;
+		return 1;
+	}
+	return 0;
 }
