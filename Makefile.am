@@ -34,7 +34,8 @@ noinst_HEADERS = \
 	shrglobs.h   stats.h \
 	simulate.h   timer.h	 transport.h \
 	typeinit.h   xpicedit.h	\
-	modules/modules.h
+	modules/modules.h \
+	modules/all_modules.h
 
 # Directories that need to have CVS and ca subdirectories removed
 LC_DISTDIRS = \
