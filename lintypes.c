@@ -4,6 +4,7 @@
  * Lincity is copyright (c) I J Peters 1995-1997, (c) Greg Sharp 1997-2001.
  * ---------------------------------------------------------------------- */
 #include <string.h> /* XXX: portability issue?  for strcpy */
+#include <stdlib.h>
 #include "lcconfig.h"
 #include "lin-city.h"
 #include "engglobs.h"
@@ -531,12 +532,15 @@ struct GROUP main_groups[NUM_OF_GROUPS] =
 
 void init_types(void)
 {
-    char png_file[LC_PATH_MAX], txt_file[LC_PATH_MAX];
-    sprintf (png_file, "%s%c%s", opening_path, PATH_SLASH, "icons.png");
-    sprintf (txt_file, "%s%c%s", opening_path, PATH_SLASH, "iconlist.txt");
+//    char png_file[LC_PATH_MAX], txt_file[LC_PATH_MAX];
+    char *png_file, *txt_file;
+    asprintf (&png_file, "%s%c%s", opening_path, PATH_SLASH, "icons.png");
+    asprintf (&txt_file, "%s%c%s", opening_path, PATH_SLASH, "iconlist.txt");
 
     load_png_graphics (txt_file,png_file);
-
+    free(png_file);
+    free(txt_file);
+    
 #if defined (commentout)
     main_types[CST_GREEN].group=GROUP_BARE;
     main_types[CST_GREEN].graphic=load_graphic(CST_GREEN_G);
