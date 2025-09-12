@@ -7,6 +7,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
 #include "lclib.h"
 #include "common.h"
 #include "lctypes.h"
@@ -356,34 +359,40 @@ _get_power (int x, int y, int power, int block_industry)
     return(0);
 
   for (i = 0; i < numof_substations; i++)
-    {
-      xi = substationx[i];
-      yi = substationy[i];
-      if (abs (xi - x) < SUBSTATION_RANGE &&
-	  abs (yi - y) < SUBSTATION_RANGE) {
+  {
+	  xi = substationx[i];
+	  yi = substationy[i];
+	  if (abs (xi - x) < SUBSTATION_RANGE &&
+	      abs (yi - y) < SUBSTATION_RANGE) {
 
-	if (block_industry != 0 && MP_GROUP(xi, yi) == GROUP_WINDMILL)
-	  continue;
+		  if (block_industry != 0 && MP_GROUP(xi, yi) == GROUP_WINDMILL)
+			  continue;
 
-	grid_tmp = MP_INFO(xi,yi).int_6;
+		  grid_tmp = MP_INFO(xi,yi).int_6;
 
-	grid[grid_tmp]->demand += power;
-	if (grid[grid_tmp]->total_power >= power) {
-	  grid[grid_tmp]->total_power -= power;
-	  MP_INFO(xi,yi).int_5 += power;
-	  return 1;
-	}
+		  grid[grid_tmp]->demand += power;
+		  if (grid[grid_tmp]->total_power >= power)
+		  {
+			  grid[grid_tmp]->total_power -= power;
+			  MP_INFO(xi,yi).int_5 += power;
+			  return 1;
+		  }
 
-      }
-    }
+	  }
+  }
   return 0;
 }
 #endif
 /*
-	TODO:give the user a chance to figure out what went wrong  
+	TODO:give the user a chance to figure out what went wrong
 */
 //int type;
+static char state[]="SRP0000";
 
+char *get_powerstate(void)
+{
+	return state;
+}
 int
 get_power (int x, int y, int power, int block_industry)
 {
@@ -393,11 +402,11 @@ get_power (int x, int y, int power, int block_industry)
 	int grid_tmp; /* for simplicity */
 #ifdef DEBUG
 	int 	type=MP_GROUP(x,y);
-#endif	
+#endif
 	if (numof_substations == 0)
 		return(0);
 
-
+	strcpy(state,"SRP"); /* init */
 
 	for (i = 0; i < numof_substations; i++)
 	{
@@ -409,23 +418,25 @@ get_power (int x, int y, int power, int block_industry)
 		*/
 		if (block_industry != 0 && MP_GROUP(xi, yi) == GROUP_WINDMILL)
 			continue;
+		state[0]='-';
 		/*
 		  station out of range
 		*/
-		if (  ! in_range(x,y,xi,yi,SUBSTATION_RANGE)   )  continue;
-
+		if (   in_range(x,y,xi,yi,SUBSTATION_RANGE)  == 0 )  continue;
+		state[1]='-';
 		grid_tmp = MP_INFO(xi,yi).int_6;
 
+		snprintf(state+3,4,"%03d",grid_tmp);
 		/*
 		  enought power left ?
 		*/
 		if ( power > grid[grid_tmp]->total_power  )
 			continue;
-
+		state[2]='-';
 		grid[grid_tmp]->demand += power;
 		grid[grid_tmp]->total_power -= power;
 		MP_INFO(xi,yi).int_5 += power;
-		return 1;
+		return grid_tmp;
 	}
 	return 0;
 }
