@@ -68,6 +68,76 @@ static void do_animate(int x, int y)
 }
 
 /*
+   int_6 is the percent of capacity last month.
+   this function chooses the base animation (-group) like *_H, *_M, *_L
+   while do_animation() will then cycle truh
+
+*/
+
+static void choose_animation(int x, int y)
+{
+
+	MP_INFO(x,y).int_6 = (MP_INFO(x,y).int_1) / (INDUSTRY_L_MAKE_GOODS * 8);
+
+	MP_INFO(x,y).int_1 = 0;
+	if (MP_INFO(x,y).int_6 > 80)
+	{
+		switch (MP_TYPE(x,y))
+		{
+		case (CST_INDUSTRY_L_H1):
+		case (CST_INDUSTRY_L_H2):
+		case (CST_INDUSTRY_L_H3):
+		case (CST_INDUSTRY_L_H4):
+			break;
+		default:
+			MP_TYPE(x,y) = CST_INDUSTRY_L_H1;
+		}
+	}
+	else if (MP_INFO(x,y).int_6 > 55)
+	{
+		switch (MP_TYPE(x,y))
+		{
+		case (CST_INDUSTRY_L_M1):
+		case (CST_INDUSTRY_L_M2):
+		case (CST_INDUSTRY_L_M3):
+		case (CST_INDUSTRY_L_M4):
+			break;
+		default:
+			MP_TYPE(x,y) = CST_INDUSTRY_L_M1;
+		}
+	}
+	else if (MP_INFO(x,y).int_6 > 25)
+	{
+		switch (MP_TYPE(x,y))
+		{
+		case (CST_INDUSTRY_L_L1):
+		case (CST_INDUSTRY_L_L2):
+		case (CST_INDUSTRY_L_L3):
+		case (CST_INDUSTRY_L_L4):
+			break;
+		default:
+			MP_TYPE(x,y) = CST_INDUSTRY_L_L1;
+		}
+	}
+	else if (MP_INFO(x,y).int_6 > 0)
+	{
+		switch (MP_TYPE(x,y))
+		{
+		case (CST_INDUSTRY_L_Q1):
+		case (CST_INDUSTRY_L_Q2):
+		case (CST_INDUSTRY_L_Q3):
+		case (CST_INDUSTRY_L_Q4):
+			break;
+		default:
+			MP_TYPE(x,y) = CST_INDUSTRY_L_Q1;
+		}
+	}
+	else
+		MP_TYPE(x,y) = CST_INDUSTRY_L_C;
+
+	return;
+}
+/*
   check for available worker
    int_5 is the jobs stored.
  */
@@ -92,22 +162,50 @@ static int check_jobs(int x,int y)
 /*
   int_3 is the amount of ore in store.
    int_5 is the jobs in store
-
- FIXME: we check only x-1 
-Later Version may check x1,y1 
 */
 
-static int check_ore(int x, int y)
-{       
-	int x1;
-	/* get some ore */
-	if (MP_INFO(x,y).int_3 + INDUSTRY_L_GET_ORE >  MAX_ORE_AT_INDUSTRY_L)
-		return -1;				 
 
-	x1=x-1;
-	if (x1<0)
+static void _check_ore (int x, int y,int x1, int y1)
+{
+
+/*
+  check for transport a x1,y1
+  no transport -> do nothing
+ */
+	if ( (MP_INFO(x1,y1).flags & FLAG_IS_TRANSPORT)  == 0 )
+		return ;
+/*
+  is is something, do we have worker ?
+ */
+	if ( MP_INFO(x1,y1).int_5 > 0)
+	{
+		if (MP_INFO(x1,y1).int_5 >= INDUSTRY_L_GET_ORE)
+		{
+			MP_INFO(x,y).int_3 += INDUSTRY_L_GET_ORE;
+			MP_INFO(x1,y1).int_5 -= INDUSTRY_L_GET_ORE;
+		}
+		else
+		{
+			MP_INFO(x,y).int_3 += MP_INFO(x1,y1).int_5;
+			MP_INFO(x1,y1).int_5 = 0;
+		}
+		MP_INFO(x,y).int_5 -= INDUSTRY_L_JOBS_LOAD_ORE;
+	}
+
+}
+
+static int check_ore(int x, int y)
+{
+
+	/* check for space to store  ore */
+	if (MP_INFO(x,y).int_3 + INDUSTRY_L_GET_ORE >  MAX_ORE_AT_INDUSTRY_L)
 		return -1;
-	
+
+	_check_ore(x, y,x-1,y);
+	_check_ore(x, y,x,y-1);
+	return 0;
+
+#if 0
 	if ((MP_INFO(x1,y).flags & FLAG_IS_TRANSPORT) != 0
 	    && MP_INFO(x1,y).int_5 > 0)
 	{
@@ -125,27 +223,48 @@ static int check_ore(int x, int y)
 	}
 
 	return 0;
-	
+#endif
 }
 /*
    int_4 is the amount of steel in store.
    int_5 is the jobs stored.
    int_6 is the percent of capacity last month.
-
-   FIXME: we check only y-1 
-
 */
 
+static void  _check_steel(int x, int y,int x1,int y1)
+{
+
+	if ( (MP_INFO(x1,y1).flags & FLAG_IS_TRANSPORT)  == 0 )
+		return ;
+
+	if ( MP_INFO(x1,y1).int_6 > 0)
+	{
+		if (MP_INFO(x1,y1).int_6 >= INDUSTRY_L_GET_STEEL)
+		{
+			MP_INFO(x,y).int_4 += INDUSTRY_L_GET_STEEL;
+			MP_INFO(x1,y1).int_6 -= INDUSTRY_L_GET_STEEL;
+		}
+		else
+		{
+			MP_INFO(x,y).int_4 += MP_INFO(x,y - 1).int_6;
+			MP_INFO(x1,y1).int_6 = 0;
+		}
+		MP_INFO(x,y).int_5 -= INDUSTRY_L_JOBS_LOAD_STEEL;
+	}
+
+}
 static int  check_steel(int x, int y)
 {
-	int y1;
-	
+
+	/* check for space to store  steel */
 	if (MP_INFO(x,y).int_4  + INDUSTRY_L_GET_STEEL > MAX_STEEL_AT_INDUSTRY_L )
 			return -1;
-	y1=y-1;
-	if (y1<0)
-		return -1;
-	
+
+	_check_steel(x, y,x-1,y);
+	_check_steel(x, y,x,y-1);
+	return 0;
+
+#if 0
 	if ((MP_INFO(x,y1).flags & FLAG_IS_TRANSPORT) != 0
 	    && MP_INFO(x,y1).int_6 > 0)
 	{
@@ -162,6 +281,7 @@ static int  check_steel(int x, int y)
 		MP_INFO(x,y).int_5 -= INDUSTRY_L_JOBS_LOAD_STEEL;
 	}
 	return 0;
+#endif
 }
 /*
 check inventory for space
@@ -180,7 +300,7 @@ static int make_goods(int x,int y, int *prod)
 	int power;
 
 /*
-	    required ore 
+	    required ore
             who many INDUSTRY_L_MAKE_GOODS can i store ?
  */
 	    storage=(MAX_GOODS_AT_INDUSTRY_L-MP_INFO(x,y).int_2)/INDUSTRY_L_MAKE_GOODS;
@@ -202,17 +322,17 @@ static int make_goods(int x,int y, int *prod)
 	       MP_POL(x,y) += INDUSTRY_L_POLLUTION; */
 
 	    /* multiply by 2 if we have steel and space. */
-	    if ( storage >= 2  )			
+	    if ( storage >= 2  )
 		    if (MP_INFO(x,y).int_4 >= INDUSTRY_L_STEEL_USED)
 		    {
 			    MP_INFO(x,y).int_4 -= INDUSTRY_L_STEEL_USED;
 			    goods += goods;
 		    }
-		
+
 	    /* multipy by 4 if we can get power. */
 	    power=get_power (x, y, goods * 10, 1);
-		
-	    if ( storage >= 8  ) 
+
+	    if ( storage >= 8  )
 		    if (power && MP_INFO(x,y).int_3 >= INDUSTRY_L_ORE_USED)
 		    {
 			    goods *= 4;
@@ -259,19 +379,47 @@ static void  make_polution(int x,int y, int goods)
    a road/rail/tack
  */
 
+static void _sell_stuff(int x,int y, int x1, int y1)
+{
+	if (MP_GROUP(x1,y1) == GROUP_ROAD
+	    && (MAX_GOODS_ON_ROAD - MP_INFO(x1,y1).int_4) <= MP_INFO(x,y).int_2)
+	{
+		MP_INFO(x,y).int_2 -= (MAX_GOODS_ON_ROAD -  MP_INFO(x1,y1).int_4);
+		MP_INFO(x1,y1).int_4 = MAX_GOODS_ON_ROAD;
+	}
+	else if (MP_GROUP(x1,y1) == GROUP_RAIL
+		 && (MAX_GOODS_ON_RAIL - MP_INFO(x1,y1).int_4) <= MP_INFO(x,y).int_2)
+	{
+		MP_INFO(x,y).int_2 -= (MAX_GOODS_ON_RAIL  -  MP_INFO(x1,y1).int_4);
+		MP_INFO(x1,y1).int_4 = MAX_GOODS_ON_RAIL;
+	}
+	else if (MP_GROUP(x1,y1) == GROUP_TRACK
+		 && (MAX_GOODS_ON_TRACK - MP_INFO(x1,y1).int_4)  <= MP_INFO(x,y).int_2)
+	{
+		MP_INFO(x,y).int_2 -= (MAX_GOODS_ON_TRACK - MP_INFO(x1,y1).int_4);
+		MP_INFO(x1,y1).int_4 = MAX_GOODS_ON_TRACK;
+	}
+}
+
+
+static void sell_stuff(int x,int y)
+{
+		_sell_stuff(x, y,x-1,y);
+		_sell_stuff(x, y,x,y-1);
+		return ;
+}
+
+#if 0
 static void sell_stuff(int x,int y)
 {
 /*
     (x,y-1)
  */
 	int x1, y1;
-	x1=x-1;
-	if (x<0)
-		return;
 	y1=y-1;
 	if (y<0)
 		return ;
-	
+
 	if (MP_GROUP(x,y1) == GROUP_ROAD
 	    && (MAX_GOODS_ON_ROAD - MP_INFO(x,y1).int_4) <= MP_INFO(x,y).int_2)
 	{
@@ -294,6 +442,10 @@ static void sell_stuff(int x,int y)
 				       - MP_INFO(x,y1).int_4);
 		MP_INFO(x,y1).int_4 = MAX_GOODS_ON_TRACK;
 	}
+
+		x1=x-1;
+	if (x<0)
+		return;
 
 /*
     (x-1,y)
@@ -325,6 +477,7 @@ static void sell_stuff(int x,int y)
 	}
 
 }
+#endif
 
 static char state[]="xxxxx";
 
@@ -342,13 +495,14 @@ do_industry_l (int x, int y)
 	// int_6 is the percent of capacity last month.
 	// int 7 is the next animation frame time.
 	*/
+
 	strcpy(state,"-----");
-	
+
 	/* if we don't have enough jobs we can't do anything */
 	if ( check_jobs(x,y) < 0)
 		return ;
 	state[0]='J';
-	
+
 	/* get some ore */
        /* if available get some more */
 	if (check_ore(x,y) == 0 )
@@ -363,7 +517,7 @@ do_industry_l (int x, int y)
 	/* now make some goods if there is room in inventory*/
 	make_goods(x,y,&goods);
 
-	if (goods > 0) 
+	if (goods > 0)
 		state[3]='G';
 	else
 		state[3]='g';
@@ -379,6 +533,8 @@ do_industry_l (int x, int y)
 	/* now choose a graphic every month */
 	if ((total_time % NUMOF_DAYS_IN_MONTH) == NUMOF_DAYS_IN_MONTH - 1)
 	{
+		//choose_animation(x,y);
+
 		MP_INFO(x,y).int_6 = (MP_INFO(x,y).int_1)
 			/ (INDUSTRY_L_MAKE_GOODS * 8);
 		MP_INFO(x,y).int_1 = 0;
@@ -444,8 +600,6 @@ do_industry_l (int x, int y)
 	}
 }
 
-extern char *get_state(void);
-
 void
 mps_light_industry (int x, int y)
 {
@@ -460,9 +614,11 @@ mps_light_industry (int x, int y)
 	p = ((MP_INFO(x,y).flags & FLAG_POWERED) != 0) ? _("YES") : _("NO");
 	mps_store_ss(i++,_("Power"),p);
 
+#ifdef DEBUG
 	mps_store_title(i++,state);
-	mps_store_title(i++,get_state());
-	
+	mps_store_title(i++,get_powerstate());
+#endif
+
 	mps_store_sd(i++,_("Output"),MP_INFO(x,y).int_1);
 
 	mps_store_sfp(i++,_("Store"),
