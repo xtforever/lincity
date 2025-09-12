@@ -2,7 +2,42 @@
 # This file is part of lincity
 # Create a new module fileset from skeleton files
 
-cp ../skel.h $1.h
-cp ../module_skel.c $1.c
+[[ -z $1 ]]  && { echo "modulname please" ; exit 1 ; }
 
-perl -pi -e "s/skel/$1/g" $1.[ch]
+MY_H="$1.h"
+MY_C="$1.c"
+
+[[ -f  $MY_H ]] && { echo "$1.h exists, cowardly running away" ; exit 1 ; }
+[[ -f $MY_C  ]] && { echo "$1.h exists, cowardly running away" ; exit 1 ; }
+
+cat <<EOF >$MY_H
+/* ---------------------------------------------------------------------- *
+ * $1.h
+ * This file is part of lincity.
+ * ---------------------------------------------------------------------- */
+
+#ifndef __$1_h__
+#define __$1_h__
+void do_$1 (int x, int y);
+void mps_$1(int x, int y);
+#endif /* __$1_h__ */
+EOF
+
+cat <<EOF >$MY_C
+/* ---------------------------------------------------------------------- *
+ * $1.h
+ * This file is part of lincity.
+ * ---------------------------------------------------------------------- */
+#include <modules/$1.h>
+
+void do_$1 (int x, int y) {
+
+};
+
+void mps_$1(int x, int y) {
+
+};
+
+
+EOF
+
