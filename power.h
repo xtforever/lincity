@@ -31,6 +31,7 @@ void power_time_step ();
 void recurse_power_grid (int startx, int starty, int steps);
 int check_grid(int x, int y, int xi, int yi);
 void project_power(int x, int y);
+extern char *get_powerstate(void);  /* for debuging */
 
 #define POWER_LINE_LOSS 1 /* one KW */
 #define POWER_MODULUS 25 /* Controls how often we see a packet in anim */
