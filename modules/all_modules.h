@@ -5,6 +5,7 @@
 #ifndef __ALL_MODULES__H__
 #define __ALL_MODULES__H__
 #include "modules/blacksmith.h"
+#include "modules/burnt.h"
 #include "modules/coalmine.h"
 #include "modules/coal_power.h"
 #include "modules/commune.h"
@@ -18,6 +19,7 @@
 #include "modules/monument.h"
 #include "modules/oremine.h"
 #include "modules/organic_farm.h"
+#include "modules/parkland.h"
 #include "modules/port.h"
 #include "modules/pottery.h"
 #include "modules/power_line.h"
