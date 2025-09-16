@@ -66,7 +66,7 @@ XXX: Then it shouldn't be here
 #define PATH_SLASH_STRING "/"
 #endif
 
-#define USE_X11_PIXMAPS
+#define USE_X11_PIXMAPS 1
 
 #ifndef TRUE
 #define TRUE 1
@@ -1296,24 +1296,17 @@ int no_credit_build (int selected_type);
 void set_mappoint_ints (int fromx, int fromy, int x, int y);
 void new_city (int* originx, int* originy, int random_village);
 extern void engine_do_time_step (void);
-extern void do_residence (int, int);
 extern void debug_print (int);
 extern void do_power_source (int, int);
 extern void do_power_source_coal (int, int);
-extern void do_industry_l (int, int);
-extern void do_industry_h (int, int);
 extern void do_power_substation (int, int);
 extern int get_power (int, int, int, int);
 extern int add_a_substation (int, int);
 extern void remove_a_substation (int, int);
-extern void do_organic_farm (int, int);
 void init_mappoint_array (void);
 extern void shuffle_mappoint_array (void);
 extern void shuffle_substations (void);
-extern void do_coalmine (int, int);
-extern void do_oremine (int, int);
-extern void do_commune (int, int);
-extern void do_port (int, int);
+
 extern int buy_food (int, int);
 extern int buy_jobs (int, int);
 extern int buy_coal (int, int);
@@ -1328,45 +1321,29 @@ extern int sell_goods (int, int);
 extern int sell_steel (int, int);
 
 extern void do_pollution (void);
-extern void do_parkland (int, int);
-extern void do_university (int, int);
+
 extern void do_recycle (int, int);
 extern void do_health_centre (int, int);
 extern void do_rocket_pad (int, int);
 extern void launch_rocket (int x, int y);
 extern void remove_people (int);
-extern void do_windmill (int, int);
-extern void do_monument (int, int);
-extern void do_school (int, int);
-extern void do_blacksmith (int, int);
-extern void do_mill (int, int);
-extern void do_pottery (int, int);
-extern void do_firestation (int, int);
-extern void do_cricket (int, int);
 extern void clear_fire_health_and_cricket_cover (void);
 extern void do_fire_health_and_cricket_cover (void);
 extern void do_fire_cover (int, int);
 extern void do_health_cover (int, int);
 extern void do_cricket_cover (int, int);
 extern void do_random_fire (int, int, int);
-extern void do_fire (int, int);
 extern int spiral_find_group (int, int, int);
 extern int spiral_find_2x2 (int, int);
 extern void add_a_shanty (void);
 extern void remove_a_shanty (void);
 extern void update_shanty (void);
-extern void do_shanty (int, int);
-extern void do_tip (int, int);
 extern void update_tech_dep (int, int);
 /*
    transport functions
    *******************
 */
 void connect_transport (int originx, int originy, int w, int h);
-extern void do_power_line (int, int);
-extern void do_track (int, int);
-extern void do_rail (int, int);
-extern void do_road (int, int);
 extern void general_transport (Map_Point_Info *, int *, int, int *);
 
 /*
