@@ -18,6 +18,8 @@
 #endif
 
 #include <ctype.h>
+
+#include "simulate.h"
 #include "common.h"
 #ifdef LC_X11
 #include <X11/cursorfont.h>
@@ -31,7 +33,7 @@
 #include "stats.h"
 #include "pbar.h"
 #include "module_buttons.h"
-
+#include "modules/all_modules.h"
 /* ---------------------------------------------------------------------- *
  * Private Fn Prototypes
  * ---------------------------------------------------------------------- */
@@ -47,7 +49,7 @@ static void setup_river2 (int x, int y, int d);
 /* ---------------------------------------------------------------------- *
  * Public Functions
  * ---------------------------------------------------------------------- */
-void
+ void
 do_time_step (void)
 {
     /* Increment game time */
@@ -225,6 +227,9 @@ simulate_mappoints (void)
 				break;
 			case GROUP_SHANTY:
 				do_shanty (x, y);
+				break;
+			case GROUP_BURNT:
+				do_burnt (x, y);
 				break;
 			}
 		}
@@ -820,7 +825,7 @@ sust_fire_cover (void)
   return (1);
 }
 
-void 
+static void 
 debug_mappoints (void)
 {
   int x, y;
